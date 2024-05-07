@@ -1,7 +1,7 @@
 const Header = () => {
   return (
     <header className="w-full h-20vh bg-white flex justify-between items-center px-10">
-      <h1 className="text-black">재잘재잘</h1>
+      <h1 className="text-black text-2xl font-bold">재잘재잘</h1>
       <div>
         <button className="text-white bg-blue-500 hover:bg-blue-700 font-medium py-2 px-4 rounded">
           로그인
