@@ -23,4 +23,11 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  .h-20vh {
+    height: 10vh;
+  }
+}
+
+.bg-custom {
+  background-color: rgb(5, 25, 35);
 }
