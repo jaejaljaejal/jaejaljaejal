@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <main className="bg-custom flex min-h-screen flex-col items-center">
       <Header />
-      <h1 className="w-full h-90vh text-3xl font-bold flex items-center justify-center">
+      <h1 className="w-full h-90vh text-3xl font-bold flex items-center justify-center text-9xl">
         재잘재잘
       </h1>
     </main>
