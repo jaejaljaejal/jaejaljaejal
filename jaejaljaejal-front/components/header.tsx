@@ -16,7 +16,7 @@ const Header = () => {
   };
 
   return (
-    <header className="w-full h-20vh bg-white flex justify-between items-center px-10">
+    <header className="w-full h-10vh bg-white flex justify-between items-center px-10">
       <h1 className="text-black text-2xl font-bold">재잘재잘</h1>
       <div>
         {isLoggedIn ? (

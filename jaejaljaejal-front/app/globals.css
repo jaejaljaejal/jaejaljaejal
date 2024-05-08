@@ -23,8 +23,11 @@ body {
   .text-balance {
     text-wrap: balance;
   }
-  .h-20vh {
+  .h-10vh {
     height: 10vh;
+  }
+  .h-90vh {
+    height: 90vh;
   }
 }
 
