@@ -34,3 +34,11 @@ body {
 .bg-custom {
   background-color: rgb(5, 25, 35);
 }
+
+.bg-kakao {
+  background-color: #fee500;
+}
+
+.text-kakao-label {
+  color: #191919;
+}

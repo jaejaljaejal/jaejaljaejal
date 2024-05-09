@@ -37,6 +37,28 @@ const LoginPage = () => {
             아이디 / 비밀번호 찾기
           </a>
         </div>
+        <p className="text-gray-500 my-4">소셜 계정으로 로그인</p>
+        <div className="flex flex-col space-y-2 w-80">
+          <button
+            type="button"
+            className="h-12 px-4 py-2 bg-white border border-gray-400 text-black rounded-lg  flex items-center justify-center"
+          >
+            {/* <img
+              src="/images/google-logo.png"
+              alt="Google"
+              className="h-6 mr-2"
+            />{" "} */}
+            구글 계정으로 로그인
+          </button>
+          <button className="h-12 px-4 py-2 bg-kakao text-kakao-label rounded-lg flex items-center justify-center">
+            {/* <img
+              src="/images/kakao-logo.png"
+              alt="Kakao"
+              className="h-6 mr-2"
+            />{" "} */}
+            카카오톡 계정으로 로그인
+          </button>
+        </div>
       </div>
     </main>
   );
