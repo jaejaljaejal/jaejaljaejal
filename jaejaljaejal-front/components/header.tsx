@@ -1,15 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [routerReady, setRouterReady] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    if (router.asPath !== undefined) {
+      setRouterReady(true); // 라우터가 준비되었다고 상태를 설정
+    }
+  }, [router]);
 
   // 로그인 페이지로 리디렉션
   const handleLoginRedirect = () => {
-    router.push("/login");
+    if (routerReady) {
+      // 라우터가 준비되었는지 확인
+      router.push("/login");
+    }
   };
 
   // // 로그인
