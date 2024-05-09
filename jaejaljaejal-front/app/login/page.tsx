@@ -37,7 +37,7 @@ const LoginPage = () => {
             아이디 / 비밀번호 찾기
           </a>
         </div>
-        <p className="text-gray-500 my-4">소셜 계정으로 로그인</p>
+        <p className="text-sm text-gray-500 my-4">소셜 계정으로 간편 로그인</p>
         <div className="flex flex-col space-y-2 w-80">
           <button
             type="button"
