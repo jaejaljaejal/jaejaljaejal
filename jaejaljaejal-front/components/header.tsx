@@ -1,18 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/router";
 
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const router = useRouter();
 
-  // 로그인 페이지로 리디렉션
-  const handleLoginRedirect = () => {
-    router.push("/login");
-  };
-
-  // // 로그인
+  // 로그인
   // const handleLogin = () => {
   //   setIsLoggedIn(true);
   // };
@@ -39,10 +32,7 @@ const Header = () => {
           </>
         ) : (
           // 비로그인
-          <button
-            onClick={handleLoginRedirect}
-            className="text-black bg-white border border-gray-400 hover:bg-gray-100 font-medium py-2 px-4 rounded-lg"
-          >
+          <button className="text-black bg-white border border-gray-400 hover:bg-gray-100 font-medium py-2 px-4 rounded-lg">
             회원가입 / 로그인
           </button>
         )}
