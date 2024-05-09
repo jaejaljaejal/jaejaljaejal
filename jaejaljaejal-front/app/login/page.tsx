@@ -23,6 +23,20 @@ const LoginPage = () => {
             로그인
           </button>
         </form>
+        <div className="flex w-80 mt-4">
+          <a
+            href="/signup"
+            className="text-xs text-gray-500 hover:text-blue-700 mr-4"
+          >
+            회원가입
+          </a>
+          <a
+            href="/recover"
+            className="text-xs text-gray-500 hover:text-blue-700"
+          >
+            아이디 / 비밀번호 찾기
+          </a>
+        </div>
       </div>
     </main>
   );
