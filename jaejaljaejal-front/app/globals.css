@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-rgb: 5, 25, 35;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-rgb: 5, 25, 35;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background-color: rgb(var(--background-rgb));
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .h-10vh {
+    height: 10vh;
+  }
+  .h-90vh {
+    height: 90vh;
+  }
+}
+
+.bg-custom {
+  background-color: rgb(5, 25, 35);
+}
+
+.bg-kakao {
+  background-color: #fee500;
+}
+
+.text-kakao-label {
+  color: #191919;
+}
