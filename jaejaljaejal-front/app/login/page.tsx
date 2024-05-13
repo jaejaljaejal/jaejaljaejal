@@ -1,6 +1,12 @@
+"use client";
 // pages/login/page.tsx
 
 const LoginPage = () => {
+  // 카카오톡 로그인 페이지로 리디렉션하는 함수
+  const handleKakaoLogin = () => {
+    window.location.href = "http://localhost:18080/oauth2/authorization/kakao";
+  };
+
   return (
     <main className="bg-custom flex min-h-screen flex-col items-center">
       <div className="w-96 bg-white h-screen flex flex-col items-center justify-center">
@@ -50,7 +56,10 @@ const LoginPage = () => {
             />{" "} */}
             구글 계정으로 로그인
           </button>
-          <button className="h-12 px-4 py-2 bg-kakao text-kakao-label rounded-lg flex items-center justify-center">
+          <button
+            onClick={handleKakaoLogin}
+            className="h-12 px-4 py-2 bg-kakao text-kakao-label rounded-lg flex items-center justify-center"
+          >
             {/* <img
               src="/images/kakao-logo.png"
               alt="Kakao"
