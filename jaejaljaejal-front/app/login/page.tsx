@@ -1,6 +1,8 @@
 "use client";
 // pages/login/page.tsx
 
+import Header from "@/components/header";
+
 const LoginPage = () => {
   // 카카오톡 로그인 페이지로 리디렉션하는 함수
   const handleKakaoLogin = () => {
@@ -9,8 +11,9 @@ const LoginPage = () => {
 
   return (
     <main className="bg-custom flex min-h-screen flex-col items-center">
-      <div className="w-96 bg-white h-screen flex flex-col items-center justify-center">
-        <p className="w-80 mb-6 text-black text-2xl font-bold">재잘재잘</p>
+      <Header/>
+      <div className="w-screen bg-white h-90vh flex flex-col items-center justify-center">
+        <p className="w-80 mb-6 text-black text-2xl font-bold">로그인</p>
         <form className="flex flex-col space-y-4">
           <input
             type="text"
