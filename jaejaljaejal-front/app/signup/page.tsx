@@ -1,3 +1,4 @@
+"use client";
 // pages/signup/page.tsx
 
 import Header from "@/components/header";
