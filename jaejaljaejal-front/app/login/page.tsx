@@ -11,7 +11,7 @@ const LoginPage = () => {
 
   return (
     <main className="bg-custom flex min-h-screen flex-col items-center">
-      <Header/>
+      <Header />
       <div className="w-screen bg-white h-90vh flex flex-col items-center justify-center">
         <p className="w-80 mb-6 text-black text-2xl font-bold">로그인</p>
         <form className="flex flex-col space-y-4">
