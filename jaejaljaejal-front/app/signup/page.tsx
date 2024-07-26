@@ -11,7 +11,7 @@ const SignupPage = () => {
         <p className="w-80 mb-6 text-black text-2xl font-bold">회원가입</p>
         <form className="flex flex-col space-y-6">
           <div className="flex flex-col w-80">
-            <p className="text-black text-lg">아이디</p>
+            <p className="text-black text-md font-semibold">아이디</p>
             <input
               type="text"
               placeholder="4~20자리 / 영문, 숫자, 특수문자 '_' 사용 가능"
@@ -19,7 +19,7 @@ const SignupPage = () => {
             />
           </div>
           <div className="flex flex-col w-80">
-            <p className="text-black text-lg">이메일</p>
+            <p className="text-black text-md font-semibold">이메일</p>
             <input
               type="email"
               placeholder="유효한 이메일 주소"
@@ -27,7 +27,7 @@ const SignupPage = () => {
             />
           </div>
           <div className="flex flex-col w-80">
-            <p className="text-black text-lg">비밀번호</p>
+            <p className="text-black text-md font-semibold">비밀번호</p>
             <input
               type="password"
               placeholder="8~16자리 / 영문 대소문자, 숫자, 특수문자 조합"
@@ -35,7 +35,7 @@ const SignupPage = () => {
             />
           </div>
           <div className="flex flex-col w-80">
-            <p className="text-black text-lg">비밀번호 확인</p>
+            <p className="text-black text-md font-semibold">비밀번호 확인</p>
             <input
               type="password"
               placeholder="비밀번호 재입력"
