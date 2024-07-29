@@ -64,12 +64,12 @@ const SignupPage = () => {
     if (field === "password") {
       if (!passwordRegex.test(formValues.password)) {
         errorsCopy.password =
-          "비밀번호는 8~16자리 / 영문 대소문자, 숫자, 특수문자 조합";
+          "8~16자리 영문 대소문자, 숫자, 특수문자 중 3가지 이상 조합으로 만들어주세요.";
         feedbackCopy.password = "";
         valid = false;
       } else {
         errorsCopy.password = "";
-        feedbackCopy.password = "유효한 비밀번호입니다.";
+        feedbackCopy.password = "사용 가능한 비밀번호입니다.";
       }
     }
 
