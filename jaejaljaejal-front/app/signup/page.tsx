@@ -30,6 +30,7 @@ const SignupPage = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
+    validateInput(name);
   };
 
   const validateInput = (field: string) => {
@@ -155,7 +156,6 @@ const SignupPage = () => {
               name="password"
               value={formValues.password}
               onChange={handleInputChange}
-              onBlur={() => handleBlur("password")}
               placeholder="8~16자리 / 영문 대소문자, 숫자, 특수문자 조합"
               className="w-full h-12 border border-black p-2 rounded-lg text-black"
             />
@@ -175,7 +175,6 @@ const SignupPage = () => {
               name="confirmPassword"
               value={formValues.confirmPassword}
               onChange={handleInputChange}
-              onBlur={() => validateInput("confirmPassword")}
               placeholder="비밀번호 재입력"
               className="w-full h-12 border border-black p-2 rounded-lg text-black"
             />
