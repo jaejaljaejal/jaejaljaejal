@@ -53,7 +53,7 @@ const SignupPage = () => {
       }
     }
 
-    if (field === "password") {
+    if (field === "password" || field === "confirmPassword") {
       if (!passwordRegex.test(formValues.password)) {
         errorsCopy.password =
           "8~16자리 영문 대소문자, 숫자, 특수문자 중 3가지 이상 조합으로 만들어주세요.";
@@ -63,16 +63,17 @@ const SignupPage = () => {
         errorsCopy.password = "";
         feedbackCopy.password = "사용 가능한 비밀번호입니다.";
       }
-    }
 
-    if (field === "confirmPassword") {
       if (formValues.password !== formValues.confirmPassword) {
         errorsCopy.confirmPassword = "비밀번호가 일치하지 않습니다.";
         feedbackCopy.confirmPassword = "";
         valid = false;
-      } else {
+      } else if (formValues.password && formValues.confirmPassword) {
         errorsCopy.confirmPassword = "";
         feedbackCopy.confirmPassword = "비밀번호가 일치합니다.";
+      } else {
+        errorsCopy.confirmPassword = "";
+        feedbackCopy.confirmPassword = "";
       }
     }
 
@@ -104,6 +105,8 @@ const SignupPage = () => {
         console.error("Error checking username", error);
       }
     }
+
+    validateInput(field);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -152,6 +155,7 @@ const SignupPage = () => {
               name="password"
               value={formValues.password}
               onChange={handleInputChange}
+              onBlur={() => handleBlur("password")}
               placeholder="8~16자리 / 영문 대소문자, 숫자, 특수문자 조합"
               className="w-full h-12 border border-black p-2 rounded-lg text-black"
             />
@@ -171,6 +175,7 @@ const SignupPage = () => {
               name="confirmPassword"
               value={formValues.confirmPassword}
               onChange={handleInputChange}
+              onBlur={() => validateInput("confirmPassword")}
               placeholder="비밀번호 재입력"
               className="w-full h-12 border border-black p-2 rounded-lg text-black"
             />
