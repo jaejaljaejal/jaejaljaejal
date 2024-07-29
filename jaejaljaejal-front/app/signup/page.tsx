@@ -2,7 +2,7 @@
 // pages/signup/page.tsx
 
 import Header from "@/components/header";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const SignupPage = () => {
   const [formValues, setFormValues] = useState({
@@ -19,48 +19,83 @@ const SignupPage = () => {
     confirmPassword: "",
   });
 
+  const [feedback, setFeedback] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
   };
 
-  const validateInput = () => {
+  useEffect(() => {
+    validateInput("username");
+  }, [formValues.username]);
+
+  useEffect(() => {
+    validateInput("password");
+    validateInput("confirmPassword");
+  }, [formValues.password, formValues.confirmPassword]);
+
+  const validateInput = (field: string) => {
     let valid = true;
-    let errors = {
-      username: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    };
+    let errorsCopy = { ...errors };
+    let feedbackCopy = { ...feedback };
 
     const usernameRegex = /^[a-zA-Z0-9_]{4,20}$/;
     const passwordRegex =
       /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,16}$/;
 
-    if (!usernameRegex.test(formValues.username)) {
-      errors.username =
-        "아이디는 4~20자리 / 영문, 숫자, 특수문자 '_' 사용 가능";
-      valid = false;
+    if (field === "username") {
+      if (!usernameRegex.test(formValues.username)) {
+        errorsCopy.username =
+          "4~20자리의 영문, 숫자와 특수문자 '_'만 사용해주세요.";
+        feedbackCopy.username = "";
+        valid = false;
+      } else {
+        errorsCopy.username = "";
+        feedbackCopy.username = "사용 가능한 ID입니다.";
+      }
     }
 
-    if (!passwordRegex.test(formValues.password)) {
-      errors.password =
-        "비밀번호는 8~16자리 / 영문 대소문자, 숫자, 특수문자 조합";
-      valid = false;
+    if (field === "password") {
+      if (!passwordRegex.test(formValues.password)) {
+        errorsCopy.password =
+          "비밀번호는 8~16자리 / 영문 대소문자, 숫자, 특수문자 조합";
+        feedbackCopy.password = "";
+        valid = false;
+      } else {
+        errorsCopy.password = "";
+        feedbackCopy.password = "유효한 비밀번호입니다.";
+      }
     }
 
-    if (formValues.password !== formValues.confirmPassword) {
-      errors.confirmPassword = "비밀번호가 일치하지 않습니다.";
-      valid = false;
+    if (field === "confirmPassword") {
+      if (formValues.password !== formValues.confirmPassword) {
+        errorsCopy.confirmPassword = "비밀번호가 일치하지 않습니다.";
+        feedbackCopy.confirmPassword = "";
+        valid = false;
+      } else {
+        errorsCopy.confirmPassword = "";
+        feedbackCopy.confirmPassword = "비밀번호가 일치합니다.";
+      }
     }
 
-    setErrors(errors);
+    setErrors(errorsCopy);
+    setFeedback(feedbackCopy);
     return valid;
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (validateInput()) {
+    if (
+      validateInput("username") &&
+      validateInput("password") &&
+      validateInput("confirmPassword")
+    ) {
       // 서버에 유효성 검사된 데이터 전송
       // 추가적인 서버 측 보안 검사를 적용하여 SQL 인젝션 및 XSS를 방지
       console.log("Form submitted");
@@ -85,6 +120,9 @@ const SignupPage = () => {
             />
             {errors.username && (
               <span className="text-red-500">{errors.username}</span>
+            )}
+            {feedback.username && (
+              <span className="text-green-500">{feedback.username}</span>
             )}
           </div>
           <div className="flex flex-col w-96">
@@ -114,6 +152,9 @@ const SignupPage = () => {
             {errors.password && (
               <span className="text-red-500">{errors.password}</span>
             )}
+            {feedback.password && (
+              <span className="text-green-500">{feedback.password}</span>
+            )}
           </div>
           <div className="flex flex-col w-96">
             <p className="text-black text-md font-semibold">비밀번호 확인</p>
@@ -127,6 +168,9 @@ const SignupPage = () => {
             />
             {errors.confirmPassword && (
               <span className="text-red-500">{errors.confirmPassword}</span>
+            )}
+            {feedback.confirmPassword && (
+              <span className="text-green-500">{feedback.confirmPassword}</span>
             )}
           </div>
           <button
