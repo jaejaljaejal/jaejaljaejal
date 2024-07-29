@@ -136,10 +136,12 @@ const SignupPage = () => {
               className="w-full h-12 border border-black p-2 rounded-lg text-black"
             />
             {errors.username && (
-              <span className="text-red-500">{errors.username}</span>
+              <span className="text-red-500 text-xs">{errors.username}</span>
             )}
             {feedback.username && (
-              <span className="text-green-500">{feedback.username}</span>
+              <span className="text-green-500 text-xs">
+                {feedback.username}
+              </span>
             )}
           </div>
 
@@ -154,10 +156,12 @@ const SignupPage = () => {
               className="w-full h-12 border border-black p-2 rounded-lg text-black"
             />
             {errors.password && (
-              <span className="text-red-500">{errors.password}</span>
+              <span className="text-red-500 text-xs">{errors.password}</span>
             )}
             {feedback.password && (
-              <span className="text-green-500">{feedback.password}</span>
+              <span className="text-green-500 text-xs">
+                {feedback.password}
+              </span>
             )}
           </div>
           <div className="flex flex-col w-96">
