@@ -124,7 +124,7 @@ const SignupPage = () => {
       <div className="w-screen bg-white h-90vh flex flex-col items-center justify-center">
         <p className="w-96 mb-6 text-black text-2xl font-bold">회원가입</p>
         <form className="flex flex-col space-y-6" onSubmit={handleSubmit}>
-          <div className="flex flex-col w-96">
+          <div className="flex flex-col space-y-2 w-96">
             <p className="text-black text-md font-semibold">아이디</p>
             <input
               type="text"
@@ -142,20 +142,7 @@ const SignupPage = () => {
               <span className="text-green-500">{feedback.username}</span>
             )}
           </div>
-          <div className="flex flex-col w-96">
-            <p className="text-black text-md font-semibold">이메일</p>
-            <input
-              type="email"
-              name="email"
-              value={formValues.email}
-              onChange={handleInputChange}
-              placeholder="유효한 이메일 주소"
-              className="w-full h-12 border border-black p-2 rounded-lg text-black"
-            />
-            {errors.email && (
-              <span className="text-red-500">{errors.email}</span>
-            )}
-          </div>
+
           <div className="flex flex-col w-96">
             <p className="text-black text-md font-semibold">비밀번호</p>
             <input
@@ -188,6 +175,20 @@ const SignupPage = () => {
             )}
             {feedback.confirmPassword && (
               <span className="text-green-500">{feedback.confirmPassword}</span>
+            )}
+          </div>
+          <div className="flex flex-col w-96">
+            <p className="text-black text-md font-semibold">이메일</p>
+            <input
+              type="email"
+              name="email"
+              value={formValues.email}
+              onChange={handleInputChange}
+              placeholder="유효한 이메일 주소"
+              className="w-full h-12 border border-black p-2 rounded-lg text-black"
+            />
+            {errors.email && (
+              <span className="text-red-500">{errors.email}</span>
             )}
           </div>
           <button
