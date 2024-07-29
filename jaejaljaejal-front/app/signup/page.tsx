@@ -4,6 +4,11 @@
 import Header from "@/components/header";
 import { useState } from "react";
 import axios from "axios";
+import {
+  evaluatePasswordStrength,
+  getPasswordStrength,
+  PasswordStrength,
+} from "./passwordUtil";
 
 const SignupPage = () => {
   const [formValues, setFormValues] = useState({
@@ -24,17 +29,24 @@ const SignupPage = () => {
     username: "",
   });
 
+  const [passwordStrength, setPasswordStrength] = useState("");
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
     validateInput(name, value);
+
+    if (name === "password") {
+      const score = evaluatePasswordStrength(value);
+      const strength = getPasswordStrength(score);
+      setPasswordStrength(strength);
+    }
   };
 
   const handleBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name === "username") {
       try {
-        // 임시 백엔드 서버 URL을 사용하여 요청
         const response = await axios.post("/api/check-username", {
           username: value,
         });
@@ -130,7 +142,7 @@ const SignupPage = () => {
               </span>
             )}
           </div>
-          <div className="flex flex-col w-96 space-y-2">
+          <div className="flex flex-col w-96 space-y-2 relative">
             <p className="text-black text-md font-semibold">비밀번호</p>
             <input
               type="password"
@@ -144,8 +156,21 @@ const SignupPage = () => {
             {errors.password && (
               <span className="text-red-500 text-xs">{errors.password}</span>
             )}
+            {passwordStrength && (
+              <span
+                className={`text-xs ${
+                  passwordStrength === "강력"
+                    ? "text-green-500"
+                    : passwordStrength === "적정"
+                    ? "text-yellow-500"
+                    : "text-red-500"
+                }`}
+              >
+                비밀번호 강도: {passwordStrength}
+              </span>
+            )}
           </div>
-          <div className="flex flex-col w-96 space-y-2">
+          <div className="flex flex-col w-96 space-y-2 relative">
             <p className="text-black text-md font-semibold">비밀번호 확인</p>
             <input
               type="password"
@@ -173,6 +198,9 @@ const SignupPage = () => {
               className="w-full h-12 border border-black p-2 rounded-lg text-black"
               required
             />
+            {errors.email && (
+              <span className="text-red-500">{errors.email}</span>
+            )}
           </div>
           <button
             type="submit"
