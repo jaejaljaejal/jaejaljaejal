@@ -2,7 +2,8 @@
 // pages/signup/page.tsx
 
 import Header from "@/components/header";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import axios from "axios";
 
 const SignupPage = () => {
   const [formValues, setFormValues] = useState({
@@ -19,10 +20,41 @@ const SignupPage = () => {
     confirmPassword: "",
   });
 
+  const [feedback, setFeedback] = useState({
+    username: "",
+  });
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
     validateInput(name, value);
+  };
+
+  const handleBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    if (name === "username") {
+      try {
+        // 임시 백엔드 서버 URL을 사용하여 요청
+        const response = await axios.post("/api/check-username", {
+          username: value,
+        });
+        if (response.data.exists) {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            username: "이미 사용 중인 아이디입니다.",
+          }));
+          setFeedback((prevFeedback) => ({ ...prevFeedback, username: "" }));
+        } else {
+          setErrors((prevErrors) => ({ ...prevErrors, username: "" }));
+          setFeedback((prevFeedback) => ({
+            ...prevFeedback,
+            username: "사용 가능한 아이디입니다.",
+          }));
+        }
+      } catch (error) {
+        console.error("아이디 중복 확인 중 오류 발생:", error);
+      }
+    }
   };
 
   const usernameRegex = /^[a-zA-Z0-9_]{4,20}$/;
@@ -84,12 +116,18 @@ const SignupPage = () => {
               name="username"
               value={formValues.username}
               onChange={handleInputChange}
+              onBlur={handleBlur}
               placeholder="4~20자리 / 영문, 숫자, 특수문자 '_' 사용 가능"
               className="w-full h-12 border border-black p-2 rounded-lg text-black"
               required
             />
             {errors.username && (
               <span className="text-red-500 text-xs">{errors.username}</span>
+            )}
+            {feedback.username && (
+              <span className="text-green-500 text-xs">
+                {feedback.username}
+              </span>
             )}
           </div>
           <div className="flex flex-col w-96 space-y-2">
