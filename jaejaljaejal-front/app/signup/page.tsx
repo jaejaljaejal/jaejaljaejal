@@ -224,6 +224,7 @@ const SignupPage = () => {
                 value={formValues.phoneNumber}
                 onChange={handleInputChange}
                 placeholder="01000000000"
+                maxLength={11}
                 className="flex-grow h-12 border border-black p-2 rounded-l-lg text-black"
                 required
               />
