@@ -145,7 +145,7 @@ const SignupPage = () => {
             )}
           </div>
 
-          <div className="flex flex-col w-96">
+          <div className="flex flex-col w-96 space-y-2">
             <p className="text-black text-md font-semibold">비밀번호</p>
             <input
               type="password"
@@ -164,7 +164,7 @@ const SignupPage = () => {
               </span>
             )}
           </div>
-          <div className="flex flex-col w-96">
+          <div className="flex flex-col w-96 space-y-2">
             <p className="text-black text-md font-semibold">비밀번호 확인</p>
             <input
               type="password"
@@ -175,13 +175,17 @@ const SignupPage = () => {
               className="w-full h-12 border border-black p-2 rounded-lg text-black"
             />
             {errors.confirmPassword && (
-              <span className="text-red-500">{errors.confirmPassword}</span>
+              <span className="text-red-500 text-xs">
+                {errors.confirmPassword}
+              </span>
             )}
             {feedback.confirmPassword && (
-              <span className="text-green-500">{feedback.confirmPassword}</span>
+              <span className="text-green-500 text-xs">
+                {feedback.confirmPassword}
+              </span>
             )}
           </div>
-          <div className="flex flex-col w-96">
+          <div className="flex flex-col w-96 space-y-2">
             <p className="text-black text-md font-semibold">이메일</p>
             <input
               type="email"
