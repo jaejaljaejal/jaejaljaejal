@@ -93,18 +93,6 @@ const SignupPage = () => {
             )}
           </div>
           <div className="flex flex-col w-96">
-            <p className="text-black text-md font-semibold">이메일</p>
-            <input
-              type="email"
-              name="email"
-              value={formValues.email}
-              onChange={handleInputChange}
-              placeholder="유효한 이메일 주소"
-              className="w-full h-12 border border-black p-2 rounded-lg text-black"
-              required
-            />
-          </div>
-          <div className="flex flex-col w-96">
             <p className="text-black text-md font-semibold">비밀번호</p>
             <input
               type="password"
@@ -135,6 +123,18 @@ const SignupPage = () => {
                 비밀번호가 일치하지 않습니다.
               </span>
             )}
+          </div>
+          <div className="flex flex-col w-96">
+            <p className="text-black text-md font-semibold">이메일</p>
+            <input
+              type="email"
+              name="email"
+              value={formValues.email}
+              onChange={handleInputChange}
+              placeholder="유효한 이메일 주소"
+              className="w-full h-12 border border-black p-2 rounded-lg text-black"
+              required
+            />
           </div>
           <button
             type="submit"
