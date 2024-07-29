@@ -25,3 +25,19 @@ export const getPasswordStrength = (score: number): PasswordStrength => {
   if (score <= 4) return "적정";
   return "강력";
 };
+
+export const validatePasswordStrength = (password: string): boolean => {
+  const hasThreeRequired =
+    [
+      /[a-z]/.test(password), // 소문자
+      /[A-Z]/.test(password), // 대문자
+      /[0-9]/.test(password), // 숫자
+      /[!@#$%^&*]/.test(password), // 특수문자
+    ].filter(Boolean).length >= 3;
+
+  return (
+    /^(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-zA-Z0-9!@#$%^&*]).{8,16}$/.test(
+      password
+    ) && hasThreeRequired
+  );
+};

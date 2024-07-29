@@ -7,7 +7,7 @@ import axios from "axios";
 import {
   evaluatePasswordStrength,
   getPasswordStrength,
-  PasswordStrength,
+  validatePasswordStrength,
 } from "./passwordUtil";
 
 const SignupPage = () => {
@@ -30,6 +30,8 @@ const SignupPage = () => {
   });
 
   const [passwordStrength, setPasswordStrength] = useState("");
+
+  const usernameRegex = /^[a-zA-Z0-9_]{4,20}$/;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -69,10 +71,6 @@ const SignupPage = () => {
     }
   };
 
-  const usernameRegex = /^[a-zA-Z0-9_]{4,20}$/;
-  const passwordRegex =
-    /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,16}$/;
-
   const validateInput = (field: string, value: string) => {
     let errorsCopy = { ...errors };
 
@@ -86,7 +84,7 @@ const SignupPage = () => {
     }
 
     if (field === "password") {
-      if (!passwordRegex.test(value)) {
+      if (!validatePasswordStrength(value)) {
         errorsCopy.password =
           "8~16자리 영문 대소문자, 숫자, 특수문자 중 3가지 이상 조합으로 만들어주세요.";
       } else {
