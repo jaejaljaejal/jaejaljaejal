@@ -3,6 +3,7 @@
 
 import Header from "@/components/header";
 import { useState, useEffect } from "react";
+import axios from "axios";
 
 const SignupPage = () => {
   const [formValues, setFormValues] = useState({
@@ -30,15 +31,6 @@ const SignupPage = () => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
   };
-
-  useEffect(() => {
-    validateInput("username");
-  }, [formValues.username]);
-
-  useEffect(() => {
-    validateInput("password");
-    validateInput("confirmPassword");
-  }, [formValues.password, formValues.confirmPassword]);
 
   const validateInput = (field: string) => {
     let valid = true;
@@ -89,6 +81,31 @@ const SignupPage = () => {
     return valid;
   };
 
+  const handleBlur = async (field: string) => {
+    if (field === "username" && validateInput(field)) {
+      try {
+        const response = await axios.post("/api/check-username", {
+          username: formValues.username,
+        });
+        if (response.data.exists) {
+          setErrors((prev) => ({
+            ...prev,
+            username: "이미 사용 중인 아이디입니다.",
+          }));
+          setFeedback((prev) => ({ ...prev, username: "" }));
+        } else {
+          setErrors((prev) => ({ ...prev, username: "" }));
+          setFeedback((prev) => ({
+            ...prev,
+            username: "사용 가능한 ID입니다.",
+          }));
+        }
+      } catch (error) {
+        console.error("Error checking username", error);
+      }
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (
@@ -97,7 +114,6 @@ const SignupPage = () => {
       validateInput("confirmPassword")
     ) {
       // 서버에 유효성 검사된 데이터 전송
-      // 추가적인 서버 측 보안 검사를 적용하여 SQL 인젝션 및 XSS를 방지
       console.log("Form submitted");
     }
   };
@@ -115,6 +131,7 @@ const SignupPage = () => {
               name="username"
               value={formValues.username}
               onChange={handleInputChange}
+              onBlur={() => handleBlur("username")}
               placeholder="4~20자리 / 영문, 숫자, 특수문자 '_' 사용 가능"
               className="w-full h-12 border border-black p-2 rounded-lg text-black"
             />
@@ -123,6 +140,20 @@ const SignupPage = () => {
             )}
             {feedback.username && (
               <span className="text-green-500">{feedback.username}</span>
+            )}
+          </div>
+          <div className="flex flex-col w-96">
+            <p className="text-black text-md font-semibold">이메일</p>
+            <input
+              type="email"
+              name="email"
+              value={formValues.email}
+              onChange={handleInputChange}
+              placeholder="유효한 이메일 주소"
+              className="w-full h-12 border border-black p-2 rounded-lg text-black"
+            />
+            {errors.email && (
+              <span className="text-red-500">{errors.email}</span>
             )}
           </div>
           <div className="flex flex-col w-96">
@@ -157,20 +188,6 @@ const SignupPage = () => {
             )}
             {feedback.confirmPassword && (
               <span className="text-green-500">{feedback.confirmPassword}</span>
-            )}
-          </div>
-          <div className="flex flex-col w-96">
-            <p className="text-black text-md font-semibold">이메일</p>
-            <input
-              type="email"
-              name="email"
-              value={formValues.email}
-              onChange={handleInputChange}
-              placeholder="유효한 이메일 주소"
-              className="w-full h-12 border border-black p-2 rounded-lg text-black"
-            />
-            {errors.email && (
-              <span className="text-red-500">{errors.email}</span>
             )}
           </div>
           <button
