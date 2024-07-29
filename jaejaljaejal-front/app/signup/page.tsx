@@ -15,14 +15,14 @@ import { validateUsername } from "./idUtil";
 const SignupPage = () => {
   const [formValues, setFormValues] = useState({
     username: "",
-    email: "",
+    phoneNumber: "",
     password: "",
     confirmPassword: "",
   });
 
   const [errors, setErrors] = useState({
     username: "",
-    email: "",
+    phoneNumber: "",
     password: "",
     confirmPassword: "",
   });
@@ -73,6 +73,9 @@ const SignupPage = () => {
     }
   };
 
+  const usernameRegex = /^[a-zA-Z0-9_]{4,20}$/;
+  const phoneNumberRegex = /^010\d{8}$/;
+
   const validateInput = (field: string, value: string) => {
     let errorsCopy = { ...errors };
 
@@ -82,6 +85,15 @@ const SignupPage = () => {
           "4~20자리의 영문, 숫자와 특수문자 '_'만 사용해주세요.";
       } else {
         errorsCopy.username = "";
+      }
+    }
+
+    if (field === "phoneNumber") {
+      if (!phoneNumberRegex.test(value)) {
+        errorsCopy.phoneNumber =
+          "유효한 전화번호를 입력해주세요. 예: 01012345678";
+      } else {
+        errorsCopy.phoneNumber = "";
       }
     }
 
@@ -102,9 +114,10 @@ const SignupPage = () => {
     const isFormValid =
       !errors.username &&
       !errors.password &&
+      !errors.phoneNumber &&
       formValues.username &&
       formValues.password &&
-      formValues.email &&
+      formValues.phoneNumber &&
       formValues.password === formValues.confirmPassword;
 
     if (isFormValid) {
@@ -112,6 +125,21 @@ const SignupPage = () => {
       console.log("Form submitted");
     } else {
       console.log("Form has errors");
+    }
+  };
+
+  const handleSendVerificationCode = async () => {
+    try {
+      const response = await axios.post("/api/send-verification-code", {
+        phoneNumber: formValues.phoneNumber,
+      });
+      if (response.data.success) {
+        alert("인증번호가 전송되었습니다.");
+      } else {
+        alert("인증번호 전송에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("인증번호 전송 중 오류 발생:", error);
     }
   };
 
@@ -187,19 +215,28 @@ const SignupPage = () => {
               </span>
             )}
           </div>
-          <div className="flex flex-col w-96 space-y-2">
-            <p className="text-black text-md font-semibold">이메일</p>
-            <input
-              type="email"
-              name="email"
-              value={formValues.email}
-              onChange={handleInputChange}
-              placeholder="유효한 이메일 주소"
-              className="w-full h-12 border border-black p-2 rounded-lg text-black"
-              required
-            />
-            {errors.email && (
-              <span className="text-red-500">{errors.email}</span>
+          <div className="flex flex-col w-96 space-y-2 relative">
+            <p className="text-black text-md font-semibold">전화번호</p>
+            <div className="flex w-full">
+              <input
+                type="text"
+                name="phoneNumber"
+                value={formValues.phoneNumber}
+                onChange={handleInputChange}
+                placeholder="01000000000"
+                className="flex-grow h-12 border border-black p-2 rounded-l-lg text-black"
+                required
+              />
+              <button
+                type="button"
+                onClick={handleSendVerificationCode}
+                className="w-1/3 h-12 bg-custom text-white rounded-r-lg hover:bg-custom"
+              >
+                전송
+              </button>
+            </div>
+            {errors.phoneNumber && (
+              <span className="text-red-500 text-xs">{errors.phoneNumber}</span>
             )}
           </div>
           <button
