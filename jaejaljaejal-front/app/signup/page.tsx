@@ -1,9 +1,16 @@
 "use client";
-// pages/signup/page.tsx
+// pages/signup/index.tsx
 
 import Header from "@/components/header";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
+import {
+  evaluatePasswordStrength,
+  getPasswordStrength,
+  PasswordStrength,
+  validatePasswordStrength,
+} from "./passwordUtil";
+import { validateUsername } from "./idUtil";
 
 const SignupPage = () => {
   const [formValues, setFormValues] = useState({
@@ -22,103 +29,89 @@ const SignupPage = () => {
 
   const [feedback, setFeedback] = useState({
     username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
   });
+
+  const [passwordStrength, setPasswordStrength] = useState<
+    PasswordStrength | ""
+  >("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
-    validateInput(name);
+    validateInput(name, value);
+
+    if (name === "password") {
+      const score = evaluatePasswordStrength(value);
+      const strength = getPasswordStrength(score);
+      setPasswordStrength(strength);
+    }
   };
 
-  const validateInput = (field: string) => {
-    let valid = true;
-    let errorsCopy = { ...errors };
-    let feedbackCopy = { ...feedback };
+  const handleBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    if (name === "username") {
+      try {
+        const response = await axios.post("/api/check-username", {
+          username: value,
+        });
+        if (response.data.exists) {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            username: "이미 사용 중인 아이디입니다.",
+          }));
+          setFeedback((prevFeedback) => ({ ...prevFeedback, username: "" }));
+        } else {
+          setErrors((prevErrors) => ({ ...prevErrors, username: "" }));
+          setFeedback((prevFeedback) => ({
+            ...prevFeedback,
+            username: "사용 가능한 아이디입니다.",
+          }));
+        }
+      } catch (error) {
+        console.error("아이디 중복 확인 중 오류 발생:", error);
+      }
+    }
+  };
 
-    const usernameRegex = /^[a-zA-Z0-9_]{4,20}$/;
-    const passwordRegex =
-      /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,16}$/;
+  const validateInput = (field: string, value: string) => {
+    let errorsCopy = { ...errors };
 
     if (field === "username") {
-      if (!usernameRegex.test(formValues.username)) {
+      if (!validateUsername(value)) {
         errorsCopy.username =
           "4~20자리의 영문, 숫자와 특수문자 '_'만 사용해주세요.";
-        feedbackCopy.username = "";
-        valid = false;
       } else {
         errorsCopy.username = "";
-        feedbackCopy.username = "사용 가능한 ID입니다.";
       }
     }
 
-    if (field === "password" || field === "confirmPassword") {
-      if (!passwordRegex.test(formValues.password)) {
+    if (field === "password") {
+      if (!validatePasswordStrength(value)) {
         errorsCopy.password =
           "8~16자리 영문 대소문자, 숫자, 특수문자 중 3가지 이상 조합으로 만들어주세요.";
-        feedbackCopy.password = "";
-        valid = false;
       } else {
         errorsCopy.password = "";
-        feedbackCopy.password = "사용 가능한 비밀번호입니다.";
-      }
-
-      if (formValues.password !== formValues.confirmPassword) {
-        errorsCopy.confirmPassword = "비밀번호가 일치하지 않습니다.";
-        feedbackCopy.confirmPassword = "";
-        valid = false;
-      } else if (formValues.password && formValues.confirmPassword) {
-        errorsCopy.confirmPassword = "";
-        feedbackCopy.confirmPassword = "비밀번호가 일치합니다.";
-      } else {
-        errorsCopy.confirmPassword = "";
-        feedbackCopy.confirmPassword = "";
       }
     }
 
     setErrors(errorsCopy);
-    setFeedback(feedbackCopy);
-    return valid;
-  };
-
-  const handleBlur = async (field: string) => {
-    if (field === "username" && validateInput(field)) {
-      try {
-        const response = await axios.post("/api/check-username", {
-          username: formValues.username,
-        });
-        if (response.data.exists) {
-          setErrors((prev) => ({
-            ...prev,
-            username: "이미 사용 중인 아이디입니다.",
-          }));
-          setFeedback((prev) => ({ ...prev, username: "" }));
-        } else {
-          setErrors((prev) => ({ ...prev, username: "" }));
-          setFeedback((prev) => ({
-            ...prev,
-            username: "사용 가능한 ID입니다.",
-          }));
-        }
-      } catch (error) {
-        console.error("Error checking username", error);
-      }
-    }
-
-    validateInput(field);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (
-      validateInput("username") &&
-      validateInput("password") &&
-      validateInput("confirmPassword")
-    ) {
+    const isFormValid =
+      !errors.username &&
+      !errors.password &&
+      formValues.username &&
+      formValues.password &&
+      formValues.email &&
+      formValues.password === formValues.confirmPassword;
+
+    if (isFormValid) {
       // 서버에 유효성 검사된 데이터 전송
       console.log("Form submitted");
+    } else {
+      console.log("Form has errors");
     }
   };
 
@@ -128,16 +121,17 @@ const SignupPage = () => {
       <div className="w-screen bg-white h-90vh flex flex-col items-center justify-center">
         <p className="w-96 mb-6 text-black text-2xl font-bold">회원가입</p>
         <form className="flex flex-col space-y-6" onSubmit={handleSubmit}>
-          <div className="flex flex-col space-y-2 w-96">
+          <div className="flex flex-col w-96 space-y-2">
             <p className="text-black text-md font-semibold">아이디</p>
             <input
               type="text"
               name="username"
               value={formValues.username}
               onChange={handleInputChange}
-              onBlur={() => handleBlur("username")}
+              onBlur={handleBlur}
               placeholder="4~20자리 / 영문, 숫자, 특수문자 '_' 사용 가능"
               className="w-full h-12 border border-black p-2 rounded-lg text-black"
+              required
             />
             {errors.username && (
               <span className="text-red-500 text-xs">{errors.username}</span>
@@ -148,8 +142,7 @@ const SignupPage = () => {
               </span>
             )}
           </div>
-
-          <div className="flex flex-col w-96 space-y-2">
+          <div className="flex flex-col w-96 space-y-2 relative">
             <p className="text-black text-md font-semibold">비밀번호</p>
             <input
               type="password"
@@ -158,17 +151,26 @@ const SignupPage = () => {
               onChange={handleInputChange}
               placeholder="8~16자리 / 영문 대소문자, 숫자, 특수문자 조합"
               className="w-full h-12 border border-black p-2 rounded-lg text-black"
+              required
             />
             {errors.password && (
               <span className="text-red-500 text-xs">{errors.password}</span>
             )}
-            {feedback.password && (
-              <span className="text-green-500 text-xs">
-                {feedback.password}
+            {passwordStrength && (
+              <span
+                className={`text-xs ${
+                  passwordStrength === "강력"
+                    ? "text-green-500"
+                    : passwordStrength === "적정"
+                    ? "text-yellow-500"
+                    : "text-red-500"
+                }`}
+              >
+                비밀번호 강도: {passwordStrength}
               </span>
             )}
           </div>
-          <div className="flex flex-col w-96 space-y-2">
+          <div className="flex flex-col w-96 space-y-2 relative">
             <p className="text-black text-md font-semibold">비밀번호 확인</p>
             <input
               type="password"
@@ -177,15 +179,11 @@ const SignupPage = () => {
               onChange={handleInputChange}
               placeholder="비밀번호 재입력"
               className="w-full h-12 border border-black p-2 rounded-lg text-black"
+              required
             />
-            {errors.confirmPassword && (
+            {formValues.password !== formValues.confirmPassword && (
               <span className="text-red-500 text-xs">
-                {errors.confirmPassword}
-              </span>
-            )}
-            {feedback.confirmPassword && (
-              <span className="text-green-500 text-xs">
-                {feedback.confirmPassword}
+                비밀번호가 일치하지 않습니다.
               </span>
             )}
           </div>
@@ -198,6 +196,7 @@ const SignupPage = () => {
               onChange={handleInputChange}
               placeholder="유효한 이메일 주소"
               className="w-full h-12 border border-black p-2 rounded-lg text-black"
+              required
             />
             {errors.email && (
               <span className="text-red-500">{errors.email}</span>
