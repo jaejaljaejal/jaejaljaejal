@@ -15,7 +15,9 @@ const SignupPage = () => {
             <input
               type="text"
               placeholder="4~20자리 / 영문, 숫자, 특수문자 '_' 사용 가능"
+              pattern="^[a-zA-Z0-9_]{4,20}$"
               className="w-full h-12 border border-black p-2 rounded-lg text-black"
+              required
             />
           </div>
           <div className="flex flex-col w-96">
@@ -24,6 +26,7 @@ const SignupPage = () => {
               type="email"
               placeholder="유효한 이메일 주소"
               className="w-full h-12 border border-black p-2 rounded-lg text-black"
+              required
             />
           </div>
           <div className="flex flex-col w-96">
@@ -31,7 +34,9 @@ const SignupPage = () => {
             <input
               type="password"
               placeholder="8~16자리 / 영문 대소문자, 숫자, 특수문자 조합"
+              pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,16}$"
               className="w-full h-12 border border-black p-2 rounded-lg text-black"
+              required
             />
           </div>
           <div className="flex flex-col w-96">
@@ -40,6 +45,7 @@ const SignupPage = () => {
               type="password"
               placeholder="비밀번호 재입력"
               className="w-full h-12 border border-black p-2 rounded-lg text-black"
+              required
             />
           </div>
           <button
