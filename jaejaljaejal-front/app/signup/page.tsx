@@ -1,5 +1,5 @@
 "use client";
-// pages/signup/page.tsx
+// pages/signup/index.tsx
 
 import Header from "@/components/header";
 import { useState } from "react";
@@ -7,8 +7,10 @@ import axios from "axios";
 import {
   evaluatePasswordStrength,
   getPasswordStrength,
+  PasswordStrength,
   validatePasswordStrength,
 } from "./passwordUtil";
+import { validateUsername } from "./idUtil";
 
 const SignupPage = () => {
   const [formValues, setFormValues] = useState({
@@ -29,9 +31,9 @@ const SignupPage = () => {
     username: "",
   });
 
-  const [passwordStrength, setPasswordStrength] = useState("");
-
-  const usernameRegex = /^[a-zA-Z0-9_]{4,20}$/;
+  const [passwordStrength, setPasswordStrength] = useState<
+    PasswordStrength | ""
+  >("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -75,7 +77,7 @@ const SignupPage = () => {
     let errorsCopy = { ...errors };
 
     if (field === "username") {
-      if (!usernameRegex.test(value)) {
+      if (!validateUsername(value)) {
         errorsCopy.username =
           "4~20자리의 영문, 숫자와 특수문자 '_'만 사용해주세요.";
       } else {
