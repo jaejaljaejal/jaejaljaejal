@@ -12,6 +12,7 @@ interface InputFieldProps {
   error?: string;
   children?: React.ReactNode;
   maxLength?: number;
+  rounded?: string;
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -26,6 +27,7 @@ const InputField: React.FC<InputFieldProps> = ({
   error,
   children,
   maxLength,
+  rounded = "rounded-lg",
 }) => (
   <div className="flex flex-col w-96 space-y-2">
     <p className="text-black text-md font-semibold">{label}</p>
@@ -37,7 +39,7 @@ const InputField: React.FC<InputFieldProps> = ({
         onChange={onChange}
         onBlur={onBlur}
         placeholder={placeholder}
-        className="flex-grow h-12 border border-black p-2 rounded-lg text-black"
+        className={`flex-grow h-12 border border-black p-2 ${rounded} text-black`}
         required={required}
         maxLength={maxLength}
       />
