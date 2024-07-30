@@ -44,7 +44,29 @@ const SignupPage = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
-    // Validation logic here if needed
+
+    // 비밀번호 유효성 검사 로직 추가
+    if (name === "password") {
+      const score = evaluatePasswordStrength(value);
+      const strength = getPasswordStrength(score);
+      setPasswordStrength(strength);
+    }
+    validateInput(name, value);
+  };
+
+  const validateInput = (field: string, value: string) => {
+    let errorsCopy = { ...errors };
+
+    if (field === "password") {
+      if (!validatePasswordStrength(value)) {
+        errorsCopy.password =
+          "8~16자리 영문 대소문자, 숫자, 특수문자 중 3가지 이상 조합으로 만들어주세요.";
+      } else {
+        errorsCopy.password = "";
+      }
+    }
+
+    setErrors(errorsCopy);
   };
 
   const handleBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
