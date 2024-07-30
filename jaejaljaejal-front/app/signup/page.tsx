@@ -1,5 +1,5 @@
 "use client";
-// pages/signup/index.tsx
+// pages/signup/page.tsx
 
 import Header from "@/components/header";
 import { useState } from "react";
@@ -14,21 +14,27 @@ import { validateUsername } from "./idUtil";
 
 const SignupPage = () => {
   const [formValues, setFormValues] = useState({
-    username: "",
-    phoneNumber: "",
+    email: "",
     password: "",
     confirmPassword: "",
+    phoneNumber: "",
+    nickname: "",
+    gender: "",
+    birthdate: "",
   });
 
   const [errors, setErrors] = useState({
-    username: "",
-    phoneNumber: "",
+    email: "",
     password: "",
     confirmPassword: "",
+    phoneNumber: "",
+    nickname: "",
+    gender: "",
+    birthdate: "",
   });
 
   const [feedback, setFeedback] = useState({
-    username: "",
+    email: "",
   });
 
   const [passwordStrength, setPasswordStrength] = useState<
@@ -38,99 +44,39 @@ const SignupPage = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
-    validateInput(name, value);
-
-    if (name === "password") {
-      const score = evaluatePasswordStrength(value);
-      const strength = getPasswordStrength(score);
-      setPasswordStrength(strength);
-    }
+    // Validation logic here if needed
   };
 
   const handleBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    if (name === "username") {
+    if (name === "email") {
       try {
-        const response = await axios.post("/api/check-username", {
-          username: value,
+        const response = await axios.post("/api/check-email", {
+          email: value,
         });
         if (response.data.exists) {
           setErrors((prevErrors) => ({
             ...prevErrors,
-            username: "이미 사용 중인 아이디입니다.",
+            email: "이미 사용 중인 이메일입니다.",
           }));
-          setFeedback((prevFeedback) => ({ ...prevFeedback, username: "" }));
+          setFeedback((prevFeedback) => ({ ...prevFeedback, email: "" }));
         } else {
-          setErrors((prevErrors) => ({ ...prevErrors, username: "" }));
+          setErrors((prevErrors) => ({ ...prevErrors, email: "" }));
           setFeedback((prevFeedback) => ({
             ...prevFeedback,
-            username: "사용 가능한 아이디입니다.",
+            email: "사용 가능한 이메일입니다.",
           }));
         }
       } catch (error) {
-        console.error("아이디 중복 확인 중 오류 발생:", error);
+        console.error("이메일 중복 확인 중 오류 발생:", error);
       }
-    }
-  };
-
-  const phoneNumberRegex = /^010\d{8}$/;
-
-  const validateInput = (field: string, value: string) => {
-    let errorsCopy = { ...errors };
-
-    if (field === "username") {
-      if (!validateUsername(value)) {
-        errorsCopy.username =
-          "4~20자리의 영문, 숫자와 특수문자 '_'만 사용해주세요.";
-      } else {
-        errorsCopy.username = "";
-      }
-    }
-
-    if (field === "phoneNumber") {
-      if (!phoneNumberRegex.test(value)) {
-        errorsCopy.phoneNumber =
-          "유효한 전화번호를 입력해주세요. 예: 01012345678";
-      } else {
-        errorsCopy.phoneNumber = "";
-      }
-    }
-
-    if (field === "password") {
-      if (!validatePasswordStrength(value)) {
-        errorsCopy.password =
-          "8~16자리 영문 대소문자, 숫자, 특수문자 중 3가지 이상 조합으로 만들어주세요.";
-      } else {
-        errorsCopy.password = "";
-      }
-    }
-
-    setErrors(errorsCopy);
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const isFormValid =
-      !errors.username &&
-      !errors.password &&
-      !errors.phoneNumber &&
-      formValues.username &&
-      formValues.password &&
-      formValues.phoneNumber &&
-      formValues.password === formValues.confirmPassword;
-
-    if (isFormValid) {
-      // 서버에 유효성 검사된 데이터 전송
-      console.log("Form submitted");
-    } else {
-      console.log("Form has errors");
     }
   };
 
   const handleSendVerificationCode = async () => {
     try {
       const response = await axios.post("/api/send-verification-code", {
-        phoneNumber: formValues.phoneNumber,
+        email: formValues.email,
       });
       if (response.data.success) {
         alert("인증번호가 전송되었습니다.");
@@ -142,31 +88,44 @@ const SignupPage = () => {
     }
   };
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // Submission logic here
+    console.log("Form submitted");
+  };
+
   return (
     <main className="bg-custom flex min-h-screen flex-col items-center">
       <Header />
-      <div className="w-screen bg-white h-90vh flex flex-col items-center justify-center">
+      <div className="w-screen h-screen bg-white flex flex-col items-center justify-center overflow-y-auto">
         <p className="w-96 mb-6 text-black text-2xl font-bold">회원가입</p>
         <form className="flex flex-col space-y-6" onSubmit={handleSubmit}>
           <div className="flex flex-col w-96 space-y-2">
-            <p className="text-black text-md font-semibold">아이디</p>
-            <input
-              type="text"
-              name="username"
-              value={formValues.username}
-              onChange={handleInputChange}
-              onBlur={handleBlur}
-              placeholder="4~20자리 / 영문, 숫자, 특수문자 '_' 사용 가능"
-              className="w-full h-12 border border-black p-2 rounded-lg text-black"
-              required
-            />
-            {errors.username && (
-              <span className="text-red-500 text-xs">{errors.username}</span>
+            <p className="text-black text-md font-semibold">아이디(이메일)</p>
+            <div className="flex w-full">
+              <input
+                type="email"
+                name="email"
+                value={formValues.email}
+                onChange={handleInputChange}
+                onBlur={handleBlur}
+                placeholder="유효한 이메일 주소"
+                className="flex-grow h-12 border border-black p-2 rounded-l-lg text-black"
+                required
+              />
+              <button
+                type="button"
+                onClick={handleSendVerificationCode}
+                className="w-1/3 h-12 bg-custom text-white rounded-r-lg hover:bg-custom"
+              >
+                전송
+              </button>
+            </div>
+            {errors.email && (
+              <span className="text-red-500 text-xs">{errors.email}</span>
             )}
-            {feedback.username && (
-              <span className="text-green-500 text-xs">
-                {feedback.username}
-              </span>
+            {feedback.email && (
+              <span className="text-green-500 text-xs">{feedback.email}</span>
             )}
           </div>
           <div className="flex flex-col w-96 space-y-2 relative">
@@ -214,29 +173,92 @@ const SignupPage = () => {
               </span>
             )}
           </div>
-          <div className="flex flex-col w-96 space-y-2 relative">
+          <div className="flex flex-col w-96 space-y-2">
             <p className="text-black text-md font-semibold">전화번호</p>
-            <div className="flex w-full">
-              <input
-                type="text"
-                name="phoneNumber"
-                value={formValues.phoneNumber}
-                onChange={handleInputChange}
-                placeholder="01000000000"
-                maxLength={11}
-                className="flex-grow h-12 border border-black p-2 rounded-l-lg text-black"
-                required
-              />
-              <button
-                type="button"
-                onClick={handleSendVerificationCode}
-                className="w-1/3 h-12 bg-custom text-white rounded-r-lg hover:bg-custom"
-              >
-                전송
-              </button>
-            </div>
+            <input
+              type="text"
+              name="phoneNumber"
+              value={formValues.phoneNumber}
+              onChange={handleInputChange}
+              placeholder="01012345678"
+              maxLength={11}
+              className="w-full h-12 border border-black p-2 rounded-lg text-black"
+              required
+            />
             {errors.phoneNumber && (
               <span className="text-red-500 text-xs">{errors.phoneNumber}</span>
+            )}
+          </div>
+          <div className="flex flex-col w-96 space-y-2">
+            <p className="text-black text-md font-semibold">닉네임</p>
+            <input
+              type="text"
+              name="nickname"
+              value={formValues.nickname}
+              onChange={handleInputChange}
+              placeholder="닉네임"
+              className="w-full h-12 border border-black p-2 rounded-lg text-black"
+              required
+            />
+            {errors.nickname && (
+              <span className="text-red-500 text-xs">{errors.nickname}</span>
+            )}
+          </div>
+          <div className="flex flex-col w-96 space-y-2">
+            <p className="text-black text-md font-semibold">성별</p>
+            <div className="flex justify-between">
+              <label className="flex items-center">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="male"
+                  onChange={handleInputChange}
+                  className="mr-2"
+                  required
+                />
+                남성
+              </label>
+              <label className="flex items-center">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="female"
+                  onChange={handleInputChange}
+                  className="mr-2"
+                  required
+                />
+                여성
+              </label>
+              <label className="flex items-center">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="other"
+                  onChange={handleInputChange}
+                  className="mr-2"
+                  required
+                />
+                기타
+              </label>
+            </div>
+            {errors.gender && (
+              <span className="text-red-500 text-xs">{errors.gender}</span>
+            )}
+          </div>
+          <div className="flex flex-col w-96 space-y-2">
+            <p className="text-black text-md font-semibold">생일</p>
+            <input
+              type="text"
+              name="birthdate"
+              value={formValues.birthdate}
+              onChange={handleInputChange}
+              placeholder="YYYYMMDD"
+              maxLength={8}
+              className="w-full h-12 border border-black p-2 rounded-lg text-black"
+              required
+            />
+            {errors.birthdate && (
+              <span className="text-red-500 text-xs">{errors.birthdate}</span>
             )}
           </div>
           <button
