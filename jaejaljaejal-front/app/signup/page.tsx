@@ -5,6 +5,11 @@ import Header from "./header";
 import InputField from "./inputField";
 import RadioGroup from "./radioGroup";
 import { useState } from "react";
+import {
+  evaluatePasswordStrength,
+  getPasswordStrength,
+  validatePasswordStrength,
+} from "./passwordUtil";
 
 const SignupPage = () => {
   const [formValues, setFormValues] = useState({
@@ -27,22 +32,37 @@ const SignupPage = () => {
     birthdate: "",
   });
 
+  const [feedback, setFeedback] = useState({
+    password: "",
+  });
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    // 숫자만 허용하는 필드
     if (name === "phoneNumber" || name === "birthdate") {
       const numericValue = value.replace(/[^0-9]/g, ""); // 숫자만 남기기
       setFormValues({ ...formValues, [name]: numericValue });
     } else {
       setFormValues({ ...formValues, [name]: value });
     }
+
+    if (name === "password") {
+      const score = evaluatePasswordStrength(value);
+      const strength = getPasswordStrength(score);
+      setFeedback({ ...feedback, password: `비밀번호 강도: ${strength}` });
+    }
   };
 
   const handleBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name === "email") {
-      // 이메일 중복 확인 로직
+      // 이메일 유효성 검사
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(value)) {
+        setErrors({ ...errors, email: "유효한 이메일 주소를 입력해주세요." });
+      } else {
+        setErrors({ ...errors, email: "" });
+      }
     }
   };
 
@@ -107,6 +127,7 @@ const SignupPage = () => {
             onChange={handleInputChange}
             required
             error={errors.password}
+            feedback={feedback.password}
           />
           <InputField
             label="비밀번호 확인"
