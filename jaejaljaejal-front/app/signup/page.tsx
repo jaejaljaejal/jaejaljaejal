@@ -99,7 +99,10 @@ const SignupPage = () => {
   return (
     <main className="bg-custom flex min-h-screen flex-col items-center">
       <Header />
-      <div className="w-screen bg-white flex flex-col items-center justify-center overflow-y-auto">
+      <div
+        className="w-screen bg-white flex flex-col items-center justify-center overflow-y-auto"
+        style={{ paddingTop: "10vh", height: "calc(100vh - 10vh)" }}
+      >
         <p className="w-96 mb-6 text-black text-2xl font-bold">회원가입</p>
         <form className="flex flex-col space-y-6" onSubmit={handleSubmit}>
           <div className="flex flex-col w-96 space-y-2">
