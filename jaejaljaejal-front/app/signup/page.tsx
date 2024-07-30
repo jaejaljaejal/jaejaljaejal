@@ -37,8 +37,6 @@ const SignupPage = () => {
     } else {
       setFormValues({ ...formValues, [name]: value });
     }
-
-    // Validation logic here if needed
   };
 
   const handleBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
@@ -75,7 +73,7 @@ const SignupPage = () => {
             type="email"
             name="email"
             value={formValues.email}
-            placeholder="email@mail.com"
+            placeholder="jaejal@email.com"
             onChange={handleInputChange}
             onBlur={handleBlur}
             required
@@ -87,7 +85,7 @@ const SignupPage = () => {
               onClick={handleSendVerificationCode}
               className="w-1/3 h-12 bg-custom text-white rounded-r-lg hover:bg-custom"
             >
-              전송
+              인증 요청
             </button>
           </InputField>
           <InputField
