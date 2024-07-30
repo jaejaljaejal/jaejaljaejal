@@ -14,6 +14,7 @@ interface InputFieldProps {
   maxLength?: number;
   rounded?: string;
   feedback?: string;
+  feedbackClass?: string;
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -30,6 +31,7 @@ const InputField: React.FC<InputFieldProps> = ({
   maxLength,
   rounded = "rounded-lg",
   feedback,
+  feedbackClass,
 }) => (
   <div className="flex flex-col w-96 space-y-2">
     <p className="text-black text-md font-semibold">{label}</p>
@@ -48,7 +50,7 @@ const InputField: React.FC<InputFieldProps> = ({
       {children}
     </div>
     {error && <span className="text-red-500 text-xs">{error}</span>}
-    {feedback && <span className="text-green-500 text-xs">{feedback}</span>}
+    {feedback && <span className={`text-xs ${feedbackClass}`}>{feedback}</span>}
   </div>
 );
 

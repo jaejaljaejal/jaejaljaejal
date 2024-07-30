@@ -36,6 +36,10 @@ const SignupPage = () => {
     password: "",
   });
 
+  const [feedbackClass, setFeedbackClass] = useState({
+    password: "",
+  });
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
@@ -50,6 +54,12 @@ const SignupPage = () => {
       const score = evaluatePasswordStrength(value);
       const strength = getPasswordStrength(score);
       setFeedback({ ...feedback, password: `비밀번호 강도: ${strength}` });
+
+      let feedbackColor = "";
+      if (strength === "위험") feedbackColor = "text-red-500 font-semibold";
+      if (strength === "보통") feedbackColor = "text-yellow-500 font-semibold";
+      if (strength === "강력") feedbackColor = "text-green-500 font-semibold";
+      setFeedbackClass({ ...feedbackClass, password: feedbackColor });
     }
   };
 
@@ -78,14 +88,7 @@ const SignupPage = () => {
   return (
     <main className="bg-custom flex min-h-screen flex-col items-center">
       <Header />
-      <div
-        className="w-screen h-screen bg-white flex flex-col items-center justify-center overflow-y-auto"
-        // style={{
-        //   paddingTop: "12vh",
-        //   paddingBottom: "2vh",
-        //   height: "calc(100vh - 12vh)",
-        // }}
-      >
+      <div className="w-screen h-screen bg-white flex flex-col items-center justify-center overflow-y-auto">
         <p className="w-96 mb-6 text-black text-2xl font-bold">회원가입</p>
         <form className="flex flex-col space-y-6" onSubmit={handleSubmit}>
           <InputField
@@ -128,6 +131,7 @@ const SignupPage = () => {
             required
             error={errors.password}
             feedback={feedback.password}
+            feedbackClass={feedbackClass.password}
           />
           <InputField
             label="비밀번호 확인"

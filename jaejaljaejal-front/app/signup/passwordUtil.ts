@@ -1,4 +1,4 @@
-export type PasswordStrength = "위험" | "적정" | "강력";
+export type PasswordStrength = "위험" | "보통" | "강력";
 
 export const evaluatePasswordStrength = (password: string): number => {
   let score = 0;
@@ -22,7 +22,7 @@ export const evaluatePasswordStrength = (password: string): number => {
 
 export const getPasswordStrength = (score: number): PasswordStrength => {
   if (score <= 2) return "위험";
-  if (score <= 4) return "적정";
+  if (score <= 4) return "보통";
   return "강력";
 };
 
