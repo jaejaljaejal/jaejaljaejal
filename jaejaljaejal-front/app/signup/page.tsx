@@ -88,9 +88,9 @@ const SignupPage = () => {
   return (
     <main className="bg-custom flex min-h-screen flex-col items-center">
       <Header />
-      <div className="w-screen h-screen bg-white flex flex-col items-center justify-center overflow-y-auto">
+      <div className="w-screen h-90vh bg-white flex flex-col items-center justify-center overflow-y-auto">
         <p className="w-96 mb-6 text-black text-2xl font-bold">회원가입</p>
-        <form className="flex flex-col space-y-6" onSubmit={handleSubmit}>
+        <form className="flex flex-col space-y-3" onSubmit={handleSubmit}>
           <InputField
             label="이메일 주소"
             type="email"
