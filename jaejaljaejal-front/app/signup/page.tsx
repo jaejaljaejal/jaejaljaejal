@@ -29,7 +29,15 @@ const SignupPage = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
+
+    // 숫자만 허용하는 필드
+    if (name === "phoneNumber" || name === "birthdate") {
+      const numericValue = value.replace(/[^0-9]/g, ""); // 숫자만 남기기
+      setFormValues({ ...formValues, [name]: numericValue });
+    } else {
+      setFormValues({ ...formValues, [name]: value });
+    }
+
     // Validation logic here if needed
   };
 
@@ -63,11 +71,11 @@ const SignupPage = () => {
         <p className="w-96 mb-6 text-black text-2xl font-bold">회원가입</p>
         <form className="flex flex-col space-y-6" onSubmit={handleSubmit}>
           <InputField
-            label="아이디(이메일)"
+            label="이메일 주소"
             type="email"
             name="email"
             value={formValues.email}
-            placeholder="유효한 이메일 주소"
+            placeholder="email@mail.com"
             onChange={handleInputChange}
             onBlur={handleBlur}
             required
@@ -82,6 +90,16 @@ const SignupPage = () => {
               전송
             </button>
           </InputField>
+          <InputField
+            label="닉네임"
+            type="text"
+            name="nickname"
+            value={formValues.nickname}
+            placeholder="닉네임"
+            onChange={handleInputChange}
+            required
+            error={errors.nickname}
+          />
           <InputField
             label="비밀번호"
             type="password"
@@ -114,14 +132,15 @@ const SignupPage = () => {
             error={errors.phoneNumber}
           />
           <InputField
-            label="닉네임"
+            label="생일"
             type="text"
-            name="nickname"
-            value={formValues.nickname}
-            placeholder="닉네임"
+            name="birthdate"
+            value={formValues.birthdate}
+            placeholder="YYYYMMDD"
             onChange={handleInputChange}
+            maxLength={8}
             required
-            error={errors.nickname}
+            error={errors.birthdate}
           />
           <RadioGroup
             label="성별"
@@ -135,17 +154,6 @@ const SignupPage = () => {
             ]}
             required
             error={errors.gender}
-          />
-          <InputField
-            label="생일"
-            type="text"
-            name="birthdate"
-            value={formValues.birthdate}
-            placeholder="YYYYMMDD"
-            onChange={handleInputChange}
-            maxLength={8}
-            required
-            error={errors.birthdate}
           />
           <button
             type="submit"
