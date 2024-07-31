@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useState } from "react";
 import {
@@ -49,7 +49,7 @@ const useSignupForm = () => {
       const numericValue = value.replace(/[^0-9]/g, ""); // 숫자만 남기기
       setFormValues({ ...formValues, [name]: numericValue });
     } else if (name === "nickname") {
-      const sanitizedValue = value.replace(/[^가-힣a-zA-Z0-9]/g, ""); // 한글, 영문, 숫자만 남기기
+      const sanitizedValue = value.replace(/[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9]/g, "");
       setFormValues({ ...formValues, [name]: sanitizedValue });
     } else {
       setFormValues({ ...formValues, [name]: value });
