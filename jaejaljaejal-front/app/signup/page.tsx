@@ -75,21 +75,8 @@ const SignupPage = () => {
         setErrors({ ...errors, email: "유효한 이메일 주소를 입력해주세요." });
         setIsEmailValid(false);
       } else {
-        // 이메일 중복 확인
-        try {
-          const response = await axios.post("/api/check-email", {
-            email: value,
-          });
-          if (response.data.exists) {
-            setErrors({ ...errors, email: "이미 사용 중인 이메일입니다." });
-            setIsEmailValid(false);
-          } else {
-            setErrors({ ...errors, email: "" });
-            setIsEmailValid(true);
-          }
-        } catch (error) {
-          console.error("이메일 중복 확인 중 오류 발생:", error);
-        }
+        setErrors({ ...errors, email: "" });
+        setIsEmailValid(true);
       }
     }
   };
