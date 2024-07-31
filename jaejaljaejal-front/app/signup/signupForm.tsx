@@ -34,7 +34,7 @@ const SignupForm: React.FC = () => {
         onBlur={handleBlur}
         required
         error={errors.email}
-        rounded="rounded-l-lg"
+        rounded="rounded-l"
       >
         <button
           type="button"
@@ -56,6 +56,7 @@ const SignupForm: React.FC = () => {
         onBlur={handleBlur}
         required
         error={errors.nickname}
+        rounded="rounded"
       />
       <FormInput
         label="비밀번호"
@@ -68,6 +69,7 @@ const SignupForm: React.FC = () => {
         error={errors.password}
         feedback={feedback.password}
         feedbackClass={feedbackClass.password}
+        rounded="rounded"
       />
       <FormInput
         label="비밀번호 확인"
@@ -80,6 +82,7 @@ const SignupForm: React.FC = () => {
         error={errors.confirmPassword}
         feedback={feedback.confirmPassword}
         feedbackClass={feedbackClass.confirmPassword}
+        rounded="rounded"
       />
       <FormInput
         label="전화번호"
@@ -91,6 +94,7 @@ const SignupForm: React.FC = () => {
         maxLength={11}
         required
         error={errors.phoneNumber}
+        rounded="rounded"
       />
       <FormInput
         label="생일"
@@ -102,6 +106,7 @@ const SignupForm: React.FC = () => {
         maxLength={8}
         required
         error={errors.birthdate}
+        rounded="rounded"
       />
       <FormRadioGroup
         label="성별"
