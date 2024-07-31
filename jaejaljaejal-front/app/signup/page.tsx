@@ -78,8 +78,20 @@ const SignupPage = () => {
         setErrors({ ...errors, email: "" });
         setIsEmailValid(true);
       }
+    } else if (name === "nickname") {
+      // 닉네임 유효성 검사
+      const nicknameRegex = /^[가-힣a-zA-Z0-9]{2,16}$/;
+      if (!nicknameRegex.test(value)) {
+        setErrors({
+          ...errors,
+          nickname: "2~16자의 한글, 영문, 숫자만 사용해주세요.",
+        });
+      } else {
+        setErrors({ ...errors, nickname: "" });
+      }
     }
   };
+
   const handleSendVerificationCode = async () => {
     // 인증번호 전송 로직
   };
@@ -125,8 +137,9 @@ const SignupPage = () => {
             type="text"
             name="nickname"
             value={formValues.nickname}
-            placeholder="닉네임"
+            placeholder="2~16자리 / 영문 대소문자, 한글, 숫자"
             onChange={handleInputChange}
+            onBlur={handleBlur}
             required
             error={errors.nickname}
           />
