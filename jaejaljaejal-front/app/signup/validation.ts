@@ -41,3 +41,13 @@ export const validatePasswordStrength = (password: string): boolean => {
     ) && hasThreeRequired
   );
 };
+
+export const validateEmail = (email: string): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+export const validateNickname = (nickname: string): boolean => {
+  const nicknameRegex = /^[가-힣a-zA-Z0-9]{2,16}$/;
+  return nicknameRegex.test(nickname);
+};
