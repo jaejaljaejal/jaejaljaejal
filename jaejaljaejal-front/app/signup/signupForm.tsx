@@ -57,6 +57,7 @@ const SignupForm: React.FC = () => {
         required
         error={errors.nickname}
         rounded="rounded"
+        maxLength={16}
       />
       <FormInput
         label="비밀번호"
