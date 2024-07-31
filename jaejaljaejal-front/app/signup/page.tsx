@@ -10,7 +10,6 @@ import {
   getPasswordStrength,
   validatePasswordStrength,
 } from "./passwordUtil";
-import axios from "axios";
 
 const SignupPage = () => {
   const [formValues, setFormValues] = useState({
@@ -35,10 +34,12 @@ const SignupPage = () => {
 
   const [feedback, setFeedback] = useState({
     password: "",
+    confirmPassword: "",
   });
 
   const [feedbackClass, setFeedbackClass] = useState({
     password: "",
+    confirmPassword: "",
   });
 
   const [isEmailValid, setIsEmailValid] = useState(false);
@@ -50,8 +51,7 @@ const SignupPage = () => {
       const numericValue = value.replace(/[^0-9]/g, ""); // 숫자만 남기기
       setFormValues({ ...formValues, [name]: numericValue });
     } else if (name === "nickname") {
-      // 한글, 영문, 숫자만 남기기
-      const sanitizedValue = value.replace(/[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9]/g, "");
+      const sanitizedValue = value.replace(/[^가-힣a-zA-Z0-9]/g, ""); // 한글, 영문, 숫자만 남기기
       setFormValues({ ...formValues, [name]: sanitizedValue });
     } else {
       setFormValues({ ...formValues, [name]: value });
@@ -67,6 +67,59 @@ const SignupPage = () => {
       if (strength === "보통") feedbackColor = "text-yellow-500 font-semibold";
       if (strength === "강력") feedbackColor = "text-green-500 font-semibold";
       setFeedbackClass({ ...feedbackClass, password: feedbackColor });
+
+      // 비밀번호 확인도 함께 업데이트
+      if (formValues.confirmPassword && value !== formValues.confirmPassword) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          confirmPassword: "비밀번호가 일치하지 않습니다.",
+        }));
+        setFeedback((prevFeedback) => ({
+          ...prevFeedback,
+          confirmPassword: "",
+        }));
+        setFeedbackClass((prevClasses) => ({
+          ...prevClasses,
+          confirmPassword: "text-red-500 font-semibold",
+        }));
+      } else if (formValues.confirmPassword) {
+        setErrors((prevErrors) => ({ ...prevErrors, confirmPassword: "" }));
+        setFeedback((prevFeedback) => ({
+          ...prevFeedback,
+          confirmPassword: "비밀번호가 일치합니다.",
+        }));
+        setFeedbackClass((prevClasses) => ({
+          ...prevClasses,
+          confirmPassword: "text-green-500 font-semibold",
+        }));
+      }
+    }
+
+    if (name === "confirmPassword") {
+      if (value !== formValues.password) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          confirmPassword: "비밀번호가 일치하지 않습니다.",
+        }));
+        setFeedback((prevFeedback) => ({
+          ...prevFeedback,
+          confirmPassword: "",
+        }));
+        setFeedbackClass((prevClasses) => ({
+          ...prevClasses,
+          confirmPassword: "text-red-500 font-semibold",
+        }));
+      } else {
+        setErrors((prevErrors) => ({ ...prevErrors, confirmPassword: "" }));
+        setFeedback((prevFeedback) => ({
+          ...prevFeedback,
+          confirmPassword: "비밀번호가 일치합니다.",
+        }));
+        setFeedbackClass((prevClasses) => ({
+          ...prevClasses,
+          confirmPassword: "text-green-500 font-semibold",
+        }));
+      }
     }
   };
 
@@ -108,7 +161,7 @@ const SignupPage = () => {
   return (
     <main className="bg-custom flex min-h-screen flex-col items-center">
       <Header />
-      <div className="w-screen bg-white flex flex-col items-center justify-center overflow-y-auto pt-16 pb-16">
+      <div className="w-screen h-90vh bg-white flex flex-col items-center justify-center overflow-y-auto">
         <p className="w-96 mb-6 text-black text-2xl font-bold">회원가입</p>
         <form className="flex flex-col space-y-3" onSubmit={handleSubmit}>
           <InputField
@@ -127,10 +180,8 @@ const SignupPage = () => {
               type="button"
               onClick={handleSendVerificationCode}
               className={`w-1/3 h-12 ${
-                isEmailValid
-                  ? "bg-custom text-white"
-                  : "bg-gray-300 text-gray-500"
-              } rounded-r-lg hover:bg-custom`}
+                isEmailValid ? "bg-custom" : "bg-gray-400"
+              } text-white rounded-r-lg hover:bg-custom`}
               disabled={!isEmailValid}
             >
               인증 요청
@@ -168,6 +219,8 @@ const SignupPage = () => {
             onChange={handleInputChange}
             required
             error={errors.confirmPassword}
+            feedback={feedback.confirmPassword}
+            feedbackClass={feedbackClass.confirmPassword}
           />
           <InputField
             label="전화번호"
