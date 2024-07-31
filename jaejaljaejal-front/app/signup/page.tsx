@@ -10,6 +10,7 @@ import {
   getPasswordStrength,
   validatePasswordStrength,
 } from "./passwordUtil";
+import axios from "axios";
 
 const SignupPage = () => {
   const [formValues, setFormValues] = useState({
@@ -39,6 +40,8 @@ const SignupPage = () => {
   const [feedbackClass, setFeedbackClass] = useState({
     password: "",
   });
+
+  const [isEmailValid, setIsEmailValid] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -70,12 +73,26 @@ const SignupPage = () => {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(value)) {
         setErrors({ ...errors, email: "유효한 이메일 주소를 입력해주세요." });
+        setIsEmailValid(false);
       } else {
-        setErrors({ ...errors, email: "" });
+        // 이메일 중복 확인
+        try {
+          const response = await axios.post("/api/check-email", {
+            email: value,
+          });
+          if (response.data.exists) {
+            setErrors({ ...errors, email: "이미 사용 중인 이메일입니다." });
+            setIsEmailValid(false);
+          } else {
+            setErrors({ ...errors, email: "" });
+            setIsEmailValid(true);
+          }
+        } catch (error) {
+          console.error("이메일 중복 확인 중 오류 발생:", error);
+        }
       }
     }
   };
-
   const handleSendVerificationCode = async () => {
     // 인증번호 전송 로직
   };
@@ -106,7 +123,12 @@ const SignupPage = () => {
             <button
               type="button"
               onClick={handleSendVerificationCode}
-              className="w-1/3 h-12 bg-custom text-white rounded-r-lg hover:bg-custom"
+              className={`w-1/3 h-12 ${
+                isEmailValid
+                  ? "bg-custom text-white"
+                  : "bg-gray-300 text-gray-500"
+              } rounded-r-lg hover:bg-custom`}
+              disabled={!isEmailValid}
             >
               인증 요청
             </button>
