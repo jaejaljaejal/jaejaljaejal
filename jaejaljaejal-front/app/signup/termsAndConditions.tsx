@@ -11,6 +11,7 @@ const TermsAndConditions: React.FC<TermsAndConditionsProps> = ({
 }) => {
   return (
     <div className="flex flex-col w-96 space-y-2">
+      <p className="text-black text-md font-semibold">약관</p>
       <div className="flex items-center">
         <input
           type="checkbox"
@@ -19,7 +20,7 @@ const TermsAndConditions: React.FC<TermsAndConditionsProps> = ({
           onChange={onAgreeChange}
           required
         />
-        <label htmlFor="agreeTerms" className="ml-2">
+        <label htmlFor="agreeTerms" className="ml-2 cursor-pointer">
           개인정보 수집 및 이용에 동의합니다.
         </label>
       </div>
