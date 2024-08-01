@@ -2,8 +2,10 @@
 
 import React from "react";
 import FormInput from "./formInput";
+import { useState } from "react";
 import FormRadioGroup from "./formRadioGroup";
 import useSignupForm from "./useSignupForm";
+import TermsAndConditions from "./termsAndConditions";
 
 const SignupForm: React.FC = () => {
   const {
@@ -15,6 +17,12 @@ const SignupForm: React.FC = () => {
     handleInputChange,
     handleBlur,
   } = useSignupForm();
+
+  const [agreed, setAgreed] = useState(false);
+
+  const handleAgreeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAgreed(e.target.checked);
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -122,6 +130,7 @@ const SignupForm: React.FC = () => {
         required
         error={errors.gender}
       />
+      <TermsAndConditions agreed={agreed} onAgreeChange={handleAgreeChange} />
       <button
         type="submit"
         className="w-96 h-12 px-4 py-2 bg-custom text-white rounded-lg hover:bg-custom"
