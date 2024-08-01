@@ -11,6 +11,7 @@ const TermsAndConditions: React.FC<TermsAndConditionsProps> = ({
 }) => {
   return (
     <div className="flex flex-col w-96 space-y-2">
+      <p className="text-black text-md font-semibold">약관</p>
       <div className="border border-gray-300 p-4 rounded-md">
         <div className="flex items-center mb-2">
           <input
@@ -24,6 +25,7 @@ const TermsAndConditions: React.FC<TermsAndConditionsProps> = ({
             개인정보 수집 및 이용에 동의합니다.
           </label>
         </div>
+        <hr className="my-2 border-gray-300" />
         <div className="flex flex-col text-sm text-gray-600 space-y-1">
           <p>
             <strong>수집하는 개인정보 항목:</strong> 이름, 이메일, 전화번호,
