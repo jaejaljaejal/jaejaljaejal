@@ -43,7 +43,7 @@ const SignupForm: React.FC = () => {
             isEmailValid ? "" : "opacity-50 cursor-not-allowed"
           }`}
         >
-          인증 요청
+          인증요청
         </button>
       </FormInput>
       <FormInput
