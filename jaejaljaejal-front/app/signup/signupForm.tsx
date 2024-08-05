@@ -59,7 +59,7 @@ const SignupForm: React.FC = () => {
         type="text"
         name="nickname"
         value={formValues.nickname}
-        placeholder="닉네임"
+        placeholder="2~16자리 / 영문 대소문자, 한글, 숫자"
         onChange={handleInputChange}
         onBlur={handleBlur}
         required
