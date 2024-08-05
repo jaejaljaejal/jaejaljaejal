@@ -52,7 +52,15 @@ const useSignupForm = () => {
       const sanitizedValue = value.replace(/[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9]/g, ""); // 한글, 영문, 숫자만 남기기
       setFormValues({ ...formValues, [name]: sanitizedValue });
 
-      if (!validateNickname(sanitizedValue)) {
+      // 닉네임 유효성 검사 로직
+      if (sanitizedValue.length < 2) {
+        // 닉네임 길이가 2자 미만인 경우
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          nickname: "2~16자의 한글, 영문, 숫자만 사용해주세요.",
+        }));
+      } else if (!validateNickname(sanitizedValue)) {
+        // 비속어가 포함된 경우 또는 기타 유효성 검사 실패 시
         setErrors((prevErrors) => ({
           ...prevErrors,
           nickname: "사용할 수 없는 닉네임입니다.",
