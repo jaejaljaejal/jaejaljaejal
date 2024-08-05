@@ -7,7 +7,7 @@ import {
   validateEmail,
   validateNickname,
   validatePasswordStrength,
-} from "./validation";
+} from "../utils/validation";
 
 const useSignupForm = () => {
   const [formValues, setFormValues] = useState({

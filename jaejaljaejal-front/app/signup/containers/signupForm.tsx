@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-import FormInput from "./formInput";
+import FormInput from "../components/formInput";
 import { useState } from "react";
-import FormRadioGroup from "./formRadioGroup";
-import useSignupForm from "./useSignupForm";
-import TermsAndConditions from "./termsAndConditions";
+import FormRadioGroup from "../components/formRadioGroup";
+import useSignupForm from "../hooks/useSignupForm";
+import TermsAndConditions from "../components/termsAndConditions";
 
 const SignupForm: React.FC = () => {
   const {
