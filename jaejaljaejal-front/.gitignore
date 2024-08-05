@@ -35,5 +35,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# swear-words
+# swear_words
 /app/signup/utils/offensiveWords.ts

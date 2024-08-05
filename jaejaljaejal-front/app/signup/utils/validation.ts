@@ -1,3 +1,5 @@
+import swear_words from "./offensiveWords";
+
 export type PasswordStrength = "위험" | "보통" | "강력";
 
 export const evaluatePasswordStrength = (password: string): number => {
@@ -49,5 +51,21 @@ export const validateEmail = (email: string): boolean => {
 
 export const validateNickname = (nickname: string): boolean => {
   const nicknameRegex = /^[가-힣a-zA-Z0-9]{2,16}$/;
-  return nicknameRegex.test(nickname);
+
+  // 정규식 검사
+  if (!nicknameRegex.test(nickname)) {
+    return false;
+  }
+
+  // 닉네임 소문자 변환
+  const lowercaseNickname = nickname.toLowerCase();
+
+  // 비속어 검사
+  for (const word of swear_words) {
+    if (lowercaseNickname.includes(word)) {
+      return false; // 비속어가 포함된 경우
+    }
+  }
+
+  return true; // 유효한 닉네임
 };
