@@ -49,8 +49,17 @@ const useSignupForm = () => {
       const numericValue = value.replace(/[^0-9]/g, ""); // 숫자만 남기기
       setFormValues({ ...formValues, [name]: numericValue });
     } else if (name === "nickname") {
-      const sanitizedValue = value.replace(/[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9]/g, "");
+      const sanitizedValue = value.replace(/[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9]/g, ""); // 한글, 영문, 숫자만 남기기
       setFormValues({ ...formValues, [name]: sanitizedValue });
+
+      if (!validateNickname(sanitizedValue)) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          nickname: "사용할 수 없는 닉네임입니다.",
+        }));
+      } else {
+        setErrors((prevErrors) => ({ ...prevErrors, nickname: "" }));
+      }
     } else {
       setFormValues({ ...formValues, [name]: value });
     }
