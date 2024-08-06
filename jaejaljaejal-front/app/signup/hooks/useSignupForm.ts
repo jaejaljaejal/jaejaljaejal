@@ -42,6 +42,14 @@ const useSignupForm = () => {
 
   const [isEmailValid, setIsEmailValid] = useState(false);
 
+  // 약관 동의 상태 추가
+  const [agreed, setAgreed] = useState(false);
+
+  // 약관 동의 상태 업데이트 함수
+  const handleAgreeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAgreed(e.target.checked);
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
@@ -168,8 +176,10 @@ const useSignupForm = () => {
     feedback,
     feedbackClass,
     isEmailValid,
+    agreed, // 약관 동의 상태 추가
     handleInputChange,
     handleBlur,
+    handleAgreeChange, // 약관 동의 상태 업데이트 함수 추가
   };
 };
 
