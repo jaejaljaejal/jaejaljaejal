@@ -42,6 +42,24 @@ const useSignupForm = () => {
 
   const [isEmailValid, setIsEmailValid] = useState(false);
 
+  const isFormValid = (): boolean => {
+    return (
+      formValues.email !== "" &&
+      validateEmail(formValues.email) &&
+      formValues.nickname !== "" &&
+      validateNickname(formValues.nickname) &&
+      formValues.password !== "" &&
+      validatePasswordStrength(formValues.password) &&
+      formValues.confirmPassword === formValues.password &&
+      formValues.gender !== "" &&
+      errors.email === "" &&
+      errors.nickname === "" &&
+      errors.password === "" &&
+      errors.confirmPassword === "" &&
+      isEmailValid // 이메일 중복 검사 여부 포함
+    );
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
@@ -170,6 +188,7 @@ const useSignupForm = () => {
     isEmailValid,
     handleInputChange,
     handleBlur,
+    isFormValid,
   };
 };
 

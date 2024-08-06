@@ -16,6 +16,7 @@ const SignupForm: React.FC = () => {
     isEmailValid,
     handleInputChange,
     handleBlur,
+    isFormValid,
   } = useSignupForm();
 
   const [agreed, setAgreed] = useState(false);
@@ -125,7 +126,6 @@ const SignupForm: React.FC = () => {
         options={[
           { label: "남성", value: "male" },
           { label: "여성", value: "female" },
-          { label: "기타", value: "other" },
         ]}
         required
         error={errors.gender}
@@ -133,7 +133,10 @@ const SignupForm: React.FC = () => {
       <TermsAndConditions agreed={agreed} onAgreeChange={handleAgreeChange} />
       <button
         type="submit"
-        className="w-96 h-12 px-4 py-2 bg-custom text-white rounded-lg hover:bg-custom"
+        className={`w-96 h-12 px-4 py-2 rounded-lg ${
+          isFormValid() ? "bg-custom text-white" : "bg-gray-300 text-gray-500"
+        }`}
+        disabled={!isFormValid()} // 버튼 비활성화 설정
       >
         회원가입
       </button>
