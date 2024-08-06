@@ -33,8 +33,8 @@ const SignupForm: React.FC = () => {
       password: formValues.password,
       nickname: formValues.nickname,
       gender: formValues.gender,
-      birthdate: formValues.birthdate,
-      phoneNumber: formValues.phoneNumber,
+      birthDate: formValues.birthdate,
+      cellPhoneNumber: formValues.phoneNumber,
     };
 
     try {
@@ -46,6 +46,7 @@ const SignupForm: React.FC = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(signupData),
+          // mode: "no-cors", // CORS 우회
         }
       );
 
