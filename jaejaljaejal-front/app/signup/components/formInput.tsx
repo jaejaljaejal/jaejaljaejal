@@ -33,9 +33,19 @@ const FormInput: React.FC<FormInputProps> = ({
   rounded,
   children,
 }) => {
+  // Check if the field is optional
+  const isOptional = name === "phoneNumber" || name === "birthdate";
+
   return (
     <div className="flex flex-col w-96 space-y-2">
-      <p className="text-black text-md font-semibold">{label}</p>
+      <div className="flex justify-between">
+        <p className="text-black text-md font-semibold">
+          {label}
+          {isOptional && (
+            <span className="text-sm text-gray-500 font-normal ml-1">(선택)</span>
+          )}
+        </p>
+      </div>
       <div className="flex w-full">
         <input
           type={type}
