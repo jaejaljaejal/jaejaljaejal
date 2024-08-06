@@ -2,10 +2,10 @@
 
 import React from "react";
 import FormInput from "../components/formInput";
-import { useState } from "react";
 import FormRadioGroup from "../components/formRadioGroup";
 import useSignupForm from "../hooks/useSignupForm";
 import TermsAndConditions from "../components/termsAndConditions";
+import { validateNickname } from "../utils/validation";
 
 const SignupForm: React.FC = () => {
   const {
@@ -14,15 +14,20 @@ const SignupForm: React.FC = () => {
     feedback,
     feedbackClass,
     isEmailValid,
+    agreed,
     handleInputChange,
     handleBlur,
+    handleAgreeChange,
   } = useSignupForm();
 
-  const [agreed, setAgreed] = useState(false);
-
-  const handleAgreeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAgreed(e.target.checked);
-  };
+  // 필수 필드와 약관 동의를 기반으로 isFormValid 계산
+  const isFormValid =
+    isEmailValid &&
+    formValues.password.length >= 8 &&
+    formValues.confirmPassword === formValues.password &&
+    validateNickname(formValues.nickname) &&
+    formValues.gender !== "" &&
+    agreed;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -46,7 +51,6 @@ const SignupForm: React.FC = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(signupData),
-          // mode: "no-cors", // CORS 우회
         }
       );
 
@@ -166,7 +170,10 @@ const SignupForm: React.FC = () => {
       <TermsAndConditions agreed={agreed} onAgreeChange={handleAgreeChange} />
       <button
         type="submit"
-        className="w-96 h-12 px-4 py-2 bg-custom text-white rounded-lg hover:bg-custom"
+        disabled={!isFormValid} // isFormValid에 따라 활성화/비활성화
+        className={`w-96 h-12 px-4 py-2 bg-custom text-white rounded-lg hover:bg-custom ${
+          isFormValid ? "" : "opacity-50 cursor-not-allowed"
+        }`}
       >
         회원가입
       </button>
