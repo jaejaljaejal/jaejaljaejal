@@ -125,7 +125,6 @@ const SignupForm: React.FC = () => {
         options={[
           { label: "남성", value: "male" },
           { label: "여성", value: "female" },
-          { label: "기타", value: "other" },
         ]}
         required
         error={errors.gender}
