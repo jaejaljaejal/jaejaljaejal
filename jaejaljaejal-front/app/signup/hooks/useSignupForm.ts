@@ -18,6 +18,7 @@ const useSignupForm = () => {
     nickname: "",
     gender: "",
     birthdate: "",
+    agreed: false,
   });
 
   const [errors, setErrors] = useState({
@@ -42,28 +43,12 @@ const useSignupForm = () => {
 
   const [isEmailValid, setIsEmailValid] = useState(false);
 
-  const isFormValid = (): boolean => {
-    return (
-      formValues.email !== "" &&
-      validateEmail(formValues.email) &&
-      formValues.nickname !== "" &&
-      validateNickname(formValues.nickname) &&
-      formValues.password !== "" &&
-      validatePasswordStrength(formValues.password) &&
-      formValues.confirmPassword === formValues.password &&
-      formValues.gender !== "" &&
-      errors.email === "" &&
-      errors.nickname === "" &&
-      errors.password === "" &&
-      errors.confirmPassword === "" &&
-      isEmailValid // 이메일 중복 검사 여부 포함
-    );
-  };
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
 
-    if (name === "phoneNumber" || name === "birthdate") {
+    if (type === "checkbox") {
+      setFormValues({ ...formValues, [name]: checked });
+    } else if (name === "phoneNumber" || name === "birthdate") {
       const numericValue = value.replace(/[^0-9]/g, ""); // 숫자만 남기기
       setFormValues({ ...formValues, [name]: numericValue });
     } else if (name === "nickname") {
@@ -178,6 +163,25 @@ const useSignupForm = () => {
         setErrors({ ...errors, nickname: "" });
       }
     }
+  };
+
+  const isFormValid = (): boolean => {
+    return (
+      formValues.email !== "" &&
+      validateEmail(formValues.email) &&
+      formValues.nickname !== "" &&
+      validateNickname(formValues.nickname) &&
+      formValues.password !== "" &&
+      validatePasswordStrength(formValues.password) &&
+      formValues.confirmPassword === formValues.password &&
+      formValues.gender !== "" &&
+      formValues.agreed && 
+      errors.email === "" &&
+      errors.nickname === "" &&
+      errors.password === "" &&
+      errors.confirmPassword === "" &&
+      isEmailValid 
+    );
   };
 
   return {
