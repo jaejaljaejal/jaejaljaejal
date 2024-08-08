@@ -2,10 +2,11 @@
 
 import React from "react";
 import FormInput from "../components/formInput";
-import { useState } from "react";
 import FormRadioGroup from "../components/formRadioGroup";
 import useSignupForm from "../hooks/useSignupForm";
 import TermsAndConditions from "../components/termsAndConditions";
+import { validateNickname } from "../utils/validation";
+import { useSignupSubmit } from "../hooks/useSignupSubmit";
 
 const SignupForm: React.FC = () => {
   const {
@@ -14,25 +15,28 @@ const SignupForm: React.FC = () => {
     feedback,
     feedbackClass,
     isEmailValid,
+    agreed,
     handleInputChange,
     handleBlur,
-    isFormValid,
+    handleAgreeChange,
   } = useSignupForm();
 
-  const [agreed, setAgreed] = useState(false);
+  const handleSubmit = useSignupSubmit();
 
-  const handleAgreeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAgreed(e.target.checked);
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // 제출 로직
-    console.log("Form submitted");
-  };
+  // 필수 필드와 약관 동의를 기반으로 isFormValid 계산
+  const isFormValid =
+    isEmailValid &&
+    formValues.password.length >= 8 &&
+    formValues.confirmPassword === formValues.password &&
+    validateNickname(formValues.nickname) &&
+    formValues.gender !== "" &&
+    agreed;
 
   return (
-    <form className="flex flex-col space-y-3" onSubmit={handleSubmit}>
+    <form
+      className="flex flex-col space-y-3"
+      onSubmit={(e) => handleSubmit(e, formValues)}
+    >
       <FormInput
         label="이메일 주소"
         type="email"
@@ -133,10 +137,10 @@ const SignupForm: React.FC = () => {
       <TermsAndConditions agreed={agreed} onAgreeChange={handleAgreeChange} />
       <button
         type="submit"
-        className={`w-96 h-12 px-4 py-2 rounded-lg ${
-          isFormValid() ? "bg-custom text-white" : "bg-gray-300 text-gray-500"
+        disabled={!isFormValid} // isFormValid에 따라 활성화/비활성화
+        className={`w-96 h-12 px-4 py-2 bg-custom text-white rounded-lg hover:bg-custom ${
+          isFormValid ? "" : "opacity-50 cursor-not-allowed"
         }`}
-        disabled={!isFormValid()} // 버튼 비활성화 설정
       >
         회원가입
       </button>
