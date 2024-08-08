@@ -6,6 +6,7 @@ import FormRadioGroup from "../components/formRadioGroup";
 import useSignupForm from "../hooks/useSignupForm";
 import TermsAndConditions from "../components/termsAndConditions";
 import { validateNickname } from "../utils/validation";
+import { useSignupSubmit } from "../hooks/useSignupSubmit";
 
 const SignupForm: React.FC = () => {
   const {
@@ -20,6 +21,8 @@ const SignupForm: React.FC = () => {
     handleAgreeChange,
   } = useSignupForm();
 
+  const handleSubmit = useSignupSubmit();
+
   // 필수 필드와 약관 동의를 기반으로 isFormValid 계산
   const isFormValid =
     isEmailValid &&
@@ -29,47 +32,11 @@ const SignupForm: React.FC = () => {
     formValues.gender !== "" &&
     agreed;
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    // 회원가입 데이터 준비
-    const signupData = {
-      email: formValues.email,
-      password: formValues.password,
-      nickname: formValues.nickname,
-      gender: formValues.gender,
-      birthDate: formValues.birthdate,
-      cellPhoneNumber: formValues.phoneNumber,
-    };
-
-    try {
-      const response = await fetch(
-        "https://fc81-175-112-161-219.ngrok-free.app/user/save",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(signupData),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("회원가입 요청 실패");
-      }
-
-      const data = await response.json();
-      console.log("회원가입 성공:", data);
-
-      // 회원가입 성공 후 추가적인 처리 (예: 페이지 이동)
-      // window.location.href = "/login";
-    } catch (error) {
-      console.error("Error submitting form:", error);
-    }
-  };
-
   return (
-    <form className="flex flex-col space-y-3" onSubmit={handleSubmit}>
+    <form
+      className="flex flex-col space-y-3"
+      onSubmit={(e) => handleSubmit(e, formValues)}
+    >
       <FormInput
         label="이메일 주소"
         type="email"

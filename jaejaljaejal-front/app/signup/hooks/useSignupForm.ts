@@ -9,8 +9,18 @@ import {
   validateNickname,
 } from "../utils/validation";
 
+export interface FormValues {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  phoneNumber: string;
+  nickname: string;
+  gender: string;
+  birthdate: string;
+}
+
 const useSignupForm = () => {
-  const initialFormValues = {
+  const initialFormValues: FormValues = {
     email: "",
     password: "",
     confirmPassword: "",
@@ -40,7 +50,7 @@ const useSignupForm = () => {
     confirmPassword: "",
   };
 
-  const [formValues, setFormValues] = useState(initialFormValues);
+  const [formValues, setFormValues] = useState<FormValues>(initialFormValues);
   const [errors, setErrors] = useState(initialErrors);
   const [feedback, setFeedback] = useState(initialFeedback);
   const [feedbackClass, setFeedbackClass] = useState(initialFeedbackClass);
