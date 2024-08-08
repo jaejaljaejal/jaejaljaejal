@@ -8,14 +8,14 @@ export const useSignupSubmit = () => {
   ) => {
     e.preventDefault();
 
-    // 회원가입 데이터 준비
+    // 공란 필드를 null로 변환하여 회원가입 데이터 준비
     const signupData = {
       email: formValues.email,
       password: formValues.password,
       nickname: formValues.nickname,
       gender: formValues.gender,
-      birthDate: formValues.birthdate,
-      cellPhoneNumber: formValues.phoneNumber,
+      birthDate: formValues.birthdate || null,
+      cellPhoneNumber: formValues.phoneNumber || null,
     };
 
     try {
