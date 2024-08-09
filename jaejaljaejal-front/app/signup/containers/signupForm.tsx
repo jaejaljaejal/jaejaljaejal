@@ -77,15 +77,17 @@ const SignupForm: React.FC = () => {
             placeholder="인증번호를 입력하세요"
             onChange={handleVerificationCodeChange}
             required
+            rounded="rounded-l"
             error={errors.verificationCode}
-          />
-          <button
-            type="button"
-            onClick={handleVerifyCode}
-            className="w-1/3 h-12 bg-custom text-white rounded-r-lg hover:bg-custom"
           >
-            확인
-          </button>
+            <button
+              type="button"
+              onClick={handleVerifyCode}
+              className="w-1/3 h-12 bg-custom text-white rounded-r-lg hover:bg-custom"
+            >
+              확인
+            </button>
+          </FormInput>
           <p className="text-red-500 text-xs">
             남은 시간: {Math.floor(timer / 60)}:
             {timer % 60 < 10 ? `0${timer % 60}` : timer % 60}
