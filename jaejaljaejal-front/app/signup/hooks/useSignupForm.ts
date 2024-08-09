@@ -70,8 +70,9 @@ const useSignupForm = () => {
     if (!isEmailValid) return;
 
     try {
-      await sendVerificationCode(formValues.email);
-      setIsEmailVerificationSent(true);
+      console.log("인증 요청 전송 중...");
+      // await sendVerificationCode(formValues.email); 실제 서버 요청 주석 처리
+      setIsEmailVerificationSent(true); // 강제로 상태 변경
       setShowVerificationInput(true);
       startTimer(180, setTimer, () => setTimer(0));
     } catch (error) {
