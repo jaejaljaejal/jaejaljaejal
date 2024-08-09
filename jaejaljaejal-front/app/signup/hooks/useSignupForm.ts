@@ -78,6 +78,24 @@ const useSignupForm = () => {
     }
   };
 
+  const handleVerificationCodeChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setVerificationCode(e.target.value);
+  };
+
+  const handleVerifyCode = () => {
+    // ! 인증번호 검증 로직 추가 ( 백엔드 연동 필요)
+    if (verificationCode === "정확한 인증번호") { // !  백엔드 연동에 따라 수정 필요
+      console.log("인증 성공");
+    } else {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        verificationCode: "인증번호가 일치하지 않습니다.",
+      }));
+    }
+  };
+
   const handleAgreeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAgreed(e.target.checked);
   };
