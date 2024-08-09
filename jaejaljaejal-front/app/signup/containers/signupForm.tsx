@@ -68,7 +68,7 @@ const SignupForm: React.FC = () => {
         </button>
       </FormInput>
       {showVerificationInput && (
-        <div>
+        <div className="space-y-3">
           <FormInput
             label="인증번호 입력"
             type="text"
