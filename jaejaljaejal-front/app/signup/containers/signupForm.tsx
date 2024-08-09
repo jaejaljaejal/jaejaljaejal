@@ -17,10 +17,15 @@ const SignupForm: React.FC = () => {
     isEmailValid,
     agreed,
     isEmailVerificationSent,
-    handleSendVerificationCode,
+    showVerificationInput,
+    verificationCode,
+    timer,
     handleInputChange,
     handleBlur,
     handleAgreeChange,
+    handleSendVerificationCode,
+    handleVerificationCodeChange,
+    handleVerifyCode,
   } = useSignupForm();
 
   const handleSubmit = useSignupSubmit();
@@ -62,6 +67,31 @@ const SignupForm: React.FC = () => {
           {isEmailVerificationSent ? "재발송" : "인증요청"}
         </button>
       </FormInput>
+      {showVerificationInput && (
+        <div>
+          <FormInput
+            label="인증번호 입력"
+            type="text"
+            name="verificationCode"
+            value={verificationCode}
+            placeholder="인증번호를 입력하세요"
+            onChange={handleVerificationCodeChange}
+            required
+            error={errors.verificationCode}
+          />
+          <button
+            type="button"
+            onClick={handleVerifyCode}
+            className="w-1/3 h-12 bg-custom text-white rounded-r-lg hover:bg-custom"
+          >
+            확인
+          </button>
+          <p className="text-red-500 text-xs">
+            남은 시간: {Math.floor(timer / 60)}:
+            {timer % 60 < 10 ? `0${timer % 60}` : timer % 60}
+          </p>
+        </div>
+      )}
       <FormInput
         label="닉네임"
         type="text"

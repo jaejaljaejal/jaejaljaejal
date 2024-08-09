@@ -39,6 +39,7 @@ const useSignupForm = () => {
     nickname: "",
     gender: "",
     birthdate: "",
+    verificationCode: "",
   };
 
   const initialFeedback = {
@@ -86,7 +87,8 @@ const useSignupForm = () => {
 
   const handleVerifyCode = () => {
     // ! 인증번호 검증 로직 추가 ( 백엔드 연동 필요)
-    if (verificationCode === "정확한 인증번호") { // !  백엔드 연동에 따라 수정 필요
+    if (verificationCode === "정확한 인증번호") {
+      // !  백엔드 연동에 따라 수정 필요
       console.log("인증 성공");
     } else {
       setErrors((prevErrors) => ({
@@ -214,6 +216,8 @@ const useSignupForm = () => {
     handleBlur,
     handleAgreeChange,
     handleSendVerificationCode,
+    handleVerificationCodeChange,
+    handleVerifyCode,
   };
 };
 
