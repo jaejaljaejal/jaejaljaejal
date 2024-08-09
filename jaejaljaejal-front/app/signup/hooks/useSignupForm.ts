@@ -8,6 +8,7 @@ import {
   validateEmail,
   validateNickname,
 } from "../utils/validation";
+import { sendVerificationCode, startTimer } from "../utils/emailVerification";
 
 export interface FormValues {
   email: string;
@@ -63,6 +64,19 @@ const useSignupForm = () => {
   const [timer, setTimer] = useState<number>(180);
   const [showVerificationInput, setShowVerificationInput] = useState(false);
   const [verificationCode, setVerificationCode] = useState<string>("");
+
+  const handleSendVerificationCode = async () => {
+    if (!isEmailValid) return;
+
+    try {
+      await sendVerificationCode(formValues.email);
+      setIsEmailVerificationSent(true);
+      setShowVerificationInput(true);
+      startTimer(180, setTimer, () => setTimer(0));
+    } catch (error) {
+      console.error("인증 요청 실패:", error);
+    }
+  };
 
   const handleAgreeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAgreed(e.target.checked);
@@ -181,6 +195,7 @@ const useSignupForm = () => {
     handleInputChange,
     handleBlur,
     handleAgreeChange,
+    handleSendVerificationCode,
   };
 };
 
