@@ -16,6 +16,8 @@ const SignupForm: React.FC = () => {
     feedbackClass,
     isEmailValid,
     agreed,
+    isEmailVerificationSent,
+    handleSendVerificationCode,
     handleInputChange,
     handleBlur,
     handleAgreeChange,
@@ -51,12 +53,13 @@ const SignupForm: React.FC = () => {
       >
         <button
           type="button"
+          onClick={handleSendVerificationCode} // 분리된 함수 연결
           disabled={!isEmailValid}
           className={`w-1/3 h-12 bg-custom text-white rounded-r-lg hover:bg-custom ${
             isEmailValid ? "" : "opacity-50 cursor-not-allowed"
           }`}
         >
-          인증요청
+          {isEmailVerificationSent ? "재발송" : "인증요청"}
         </button>
       </FormInput>
       <FormInput
