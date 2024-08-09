@@ -50,12 +50,19 @@ const useSignupForm = () => {
     confirmPassword: "",
   };
 
+  // ? 폼 상태
   const [formValues, setFormValues] = useState<FormValues>(initialFormValues);
   const [errors, setErrors] = useState(initialErrors);
   const [feedback, setFeedback] = useState(initialFeedback);
   const [feedbackClass, setFeedbackClass] = useState(initialFeedbackClass);
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [agreed, setAgreed] = useState(false);
+
+  // ? 이메일 인증 관련 상태
+  const [isEmailVerificationSent, setIsEmailVerificationSent] = useState(false);
+  const [timer, setTimer] = useState<number>(180);
+  const [showVerificationInput, setShowVerificationInput] = useState(false);
+  const [verificationCode, setVerificationCode] = useState<string>("");
 
   const handleAgreeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAgreed(e.target.checked);
@@ -167,6 +174,10 @@ const useSignupForm = () => {
     feedbackClass,
     isEmailValid,
     agreed,
+    isEmailVerificationSent,
+    timer,
+    showVerificationInput,
+    verificationCode,
     handleInputChange,
     handleBlur,
     handleAgreeChange,
