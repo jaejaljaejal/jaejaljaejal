@@ -141,7 +141,6 @@ const SignupForm: React.FC = () => {
         placeholder="01012345678"
         onChange={handleInputChange}
         maxLength={11}
-        required
         error={errors.phoneNumber}
         rounded="rounded"
       />
@@ -153,7 +152,6 @@ const SignupForm: React.FC = () => {
         placeholder="YYYYMMDD"
         onChange={handleInputChange}
         maxLength={8}
-        required
         error={errors.birthdate}
         rounded="rounded"
       />
