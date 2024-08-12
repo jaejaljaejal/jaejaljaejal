@@ -189,13 +189,44 @@ const useSignupForm = () => {
 
   const handleBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
     if (name === "email") {
       if (!validateEmail(value)) {
         setErrors({ ...errors, email: "유효한 이메일 주소를 입력해주세요." });
         setIsEmailValid(false);
       } else {
-        setErrors({ ...errors, email: "" });
-        setIsEmailValid(true);
+        try {
+          const response = await fetch(
+            "https://2158-175-112-161-219.ngrok-free.app/email/check",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email: value }),
+            }
+          );
+
+          if (response.status === 200) {
+            // 200 상태 코드일 경우 이메일 중복되지 않음
+            setErrors({ ...errors, email: "" });
+            setIsEmailValid(true);
+          } else if (response.status === 409) {
+            // 409 상태 코드일 경우 이메일이 중복됨
+            setErrors({ ...errors, email: "이미 사용 중인 이메일입니다." });
+            setIsEmailValid(false);
+          } else {
+            // 그 외 상태 코드 처리
+            throw new Error(`서버 오류 발생: 상태 코드 ${response.status}`);
+          }
+        } catch (error) {
+          console.error("Error checking email:", error);
+          setErrors({
+            ...errors,
+            email: "이메일 중복 확인 중 오류가 발생했습니다.",
+          });
+          setIsEmailValid(false);
+        }
       }
     } else if (name === "nickname") {
       validateNicknameValue(value);
