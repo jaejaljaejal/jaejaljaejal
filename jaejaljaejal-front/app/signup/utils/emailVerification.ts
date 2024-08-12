@@ -4,7 +4,7 @@ export const sendVerificationCode = async (email: string) => {
 
   try {
     const response = await fetch(
-      "https://example.com/api/send-verification-code",
+      "https://2158-175-112-161-219.ngrok-free.app/email/send",
       {
         method: "POST",
         headers: {
