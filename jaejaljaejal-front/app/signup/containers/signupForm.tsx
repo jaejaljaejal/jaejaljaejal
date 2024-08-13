@@ -146,13 +146,14 @@ const SignupForm: React.FC = () => {
       />
       <FormInput
         label="생일"
-        type="date" // 타입을 date로 변경
+        type="date"
         name="birthdate"
         value={formValues.birthdate}
         onChange={handleInputChange}
         placeholder="YYYY-MM-DD"
         error={errors.birthdate}
         rounded="rounded"
+        max="9999-12-31"
       />
       <FormRadioGroup
         label="성별"

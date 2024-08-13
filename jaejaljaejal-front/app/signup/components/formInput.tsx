@@ -7,6 +7,7 @@ interface FormInputProps {
   value: string;
   placeholder: string;
   maxLength?: number;
+  max?: string; // max 속성 추가
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   required?: boolean;
@@ -24,6 +25,7 @@ const FormInput: React.FC<FormInputProps> = ({
   value,
   placeholder,
   maxLength,
+  max, // max 속성 추가
   onChange,
   onBlur,
   required,
@@ -42,7 +44,9 @@ const FormInput: React.FC<FormInputProps> = ({
         <p className="text-black text-md font-semibold">
           {label}
           {isOptional && (
-            <span className="text-sm text-gray-500 font-normal ml-1">(선택)</span>
+            <span className="text-sm text-gray-500 font-normal ml-1">
+              (선택)
+            </span>
           )}
         </p>
       </div>
@@ -56,6 +60,7 @@ const FormInput: React.FC<FormInputProps> = ({
           onBlur={onBlur}
           required={required}
           maxLength={maxLength}
+          max={max}
           className={`flex-grow h-12 border border-black p-2 ${rounded} text-black`}
         />
         {children}
