@@ -104,29 +104,31 @@ const useSignupForm = () => {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target;
     let newValues = { ...formValues, [name]: value };
 
-    if (name === "phoneNumber" || name === "birthdate") {
+    if (type === "date") {
+      // Date 타입의 입력 값을 처리
+      newValues = { ...formValues, [name]: value };
+    } else if (name === "phoneNumber" || name === "birthdate") {
+      // 숫자만 입력 가능하게 처리
       newValues = { ...formValues, [name]: value.replace(/[^0-9]/g, "") };
-    }
-
-    if (name === "nickname") {
+    } else if (name === "nickname") {
+      // 닉네임 처리 및 유효성 검사
       newValues = {
         ...formValues,
         [name]: value.replace(/[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9]/g, ""),
       };
       validateNicknameValue(newValues[name]);
-    }
-
-    if (name === "password") {
+    } else if (name === "password") {
+      // 비밀번호 처리 및 강도 검사
       handlePasswordChange(newValues[name]);
-    }
-
-    if (name === "confirmPassword") {
+    } else if (name === "confirmPassword") {
+      // 비밀번호 확인 처리
       validateConfirmPassword(newValues[name]);
     }
 
+    // 최종적으로 상태 업데이트
     setFormValues(newValues);
   };
 
