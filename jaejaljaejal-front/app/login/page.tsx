@@ -1,48 +1,21 @@
 "use client";
 import React, { useState } from "react";
 import Header from "@/components/header";
+import { validateEmail } from "../login/utils/validation";
+import { useLogin } from "../login/hooks/useLogin";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [feedback, setFeedback] = useState("");
+  const { feedback, handleLogin } = useLogin();
 
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    // 이메일 유효성 검사
     if (!validateEmail(email)) {
       setFeedback("올바른 이메일 주소를 입력해주세요.");
       return;
     }
-
-    try {
-      const response = await fetch("https://your-backend-url/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        // JWT 토큰을 받아서 로컬 스토리지에 저장
-        localStorage.setItem("token", data.token);
-        setFeedback(""); // 성공적으로 로그인 시 피드백 제거
-        // 이후 페이지 리다이렉션 로직 추가
-      } else {
-        setFeedback("아이디 또는 비밀번호가 일치하지 않습니다.");
-      }
-    } catch (error) {
-      console.error("Error logging in:", error);
-      setFeedback("로그인 중 오류가 발생했습니다.");
-    }
+    handleLogin(e, email, password);
   };
 
   const handleKakaoLogin = () => {
@@ -54,7 +27,7 @@ const LoginPage = () => {
       <Header />
       <div className="w-screen bg-white h-90vh flex flex-col items-center justify-center">
         <p className="w-80 mb-6 text-black text-2xl font-bold">로그인</p>
-        <form className="flex flex-col space-y-4" onSubmit={handleLogin}>
+        <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
           <input
             type="text"
             placeholder="아이디"
