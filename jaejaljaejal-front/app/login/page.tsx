@@ -7,7 +7,8 @@ import { useLogin } from "../login/hooks/useLogin";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { feedback, handleLogin } = useLogin();
+  const [feedback, setFeedback] = useState(""); // feedback 상태를 LoginPage에서 관리
+  const { handleLogin } = useLogin();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -15,7 +16,7 @@ const LoginPage = () => {
       setFeedback("올바른 이메일 주소를 입력해주세요.");
       return;
     }
-    handleLogin(e, email, password);
+    handleLogin(e, email, password, setFeedback); // setFeedback 함수를 인자로 전달
   };
 
   const handleKakaoLogin = () => {

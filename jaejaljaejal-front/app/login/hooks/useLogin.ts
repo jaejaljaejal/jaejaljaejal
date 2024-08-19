@@ -1,13 +1,10 @@
 // hooks/useLogin.ts
-import { useState } from "react";
-
 export const useLogin = () => {
-  const [feedback, setFeedback] = useState("");
-
   const handleLogin = async (
     e: React.FormEvent<HTMLFormElement>,
     email: string,
-    password: string
+    password: string,
+    setFeedback: (message: string) => void
   ) => {
     e.preventDefault();
 
@@ -36,7 +33,6 @@ export const useLogin = () => {
   };
 
   return {
-    feedback,
     handleLogin,
   };
 };
